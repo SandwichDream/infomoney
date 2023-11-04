@@ -1,0 +1,62 @@
+body{
+    background: linear-gradient(to right, #323E42, #3e5f51);
+    display: flex;
+    justify-content: center;
+}
+.infomoney-title{
+    color: #92CAC0;
+    font-size: 80px;
+}
+p{
+    font-size: 44px;
+    color: #F5F5F5;
+}
+.btn1{
+    font-size: 36px;
+    color: #F5F5F5;
+    padding: 20px 60px;
+    border: none;
+    outline: none;
+    position: relative;
+    border-radius: 20px;
+    background: linear-gradient(to bottom, #D0E6F0, #50C49D, #92CAC0, #93D5E100);
+    cursor: pointer;
+    z-index: 1;
+}
+.btn1::before {
+    content: "";
+    position: absolute;
+    left: 2px;
+    right: 2px;
+    top: 2px;
+    bottom: 2px;
+    border-radius: 20px;
+    background-color: #323E42;
+    z-index: -1;
+}
+.btn2{
+    font-size: 36px;
+    margin-left: 20px;
+    padding: 20px 60px;
+    border-radius: 20px;
+    background: #92CAC0;
+    color: #323E42;
+}
+.btn2:hover{
+    color: #5d808b;
+}
+img{
+    width: 80%;
+    filter: hue-rotate(165deg)
+}
+.div-left{
+    width: 55%;
+    /* background-color: red; */
+}
+.div-right{
+    width: 45%;
+    /* background-color: blue; */
+}
+.ml-140{
+    margin-left: 140px;
+}
