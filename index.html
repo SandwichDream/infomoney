@@ -19,7 +19,7 @@
                 <p>додаток, який слідкує за вашими фінансами</p>
                 <div class="d-flex flex-row">
                     <button type="button" class="btn btn-sign">реєстрація</button>
-                    <button type="button" class="btn btn-login">логін</button>
+                    <button type="button" class="btn btn-log">логін</button>
                 </div> 
             </div>
         </div>
@@ -28,8 +28,8 @@
             <img src="images/pig.png" alt="" draggable="false" ondragstart="return false;">
         </div>
 
-        <div class="modal-fullscreen sign-in d-none">
-            <div class="d-flex flex-column justify-content-evenly align-items-center sign-in-child">
+        <div class="modal-fullscreen modal-window d-none">
+            <div class="d-flex flex-column justify-content-evenly align-items-center sign-in d-none">
                 <input class="user" placeholder="login" type="text">
                 <input class="password" placeholder="password" type="text">
                 <input class="password" placeholder="repeat password" type="text">
@@ -41,20 +41,17 @@
                     </svg>
                 </button>
             </div>
-        </div>
-        
-
-        <div class="d-flex flex-column justify-content-evenly align-items-center sign-in d-none">
-            <input class="user" placeholder="login" type="text">
-            <input class="password" placeholder="password" type="text">
-            <input class="password" placeholder="repeat password" type="text">
-            <button class="btn btn-done">Done</button>
-            <button class="btn-cross">
-                <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 44 44" fill="none">
-                    <path d="M2.97546 2.97559L42 42" stroke="#323E42" stroke-width="3.42416" stroke-linecap="round"/>
-                    <path d="M2 41.0244L41.0245 2.00004" stroke="#323E42" stroke-width="3.42416" stroke-linecap="round"/>
-                </svg>
-            </button>
+            <div class="d-flex flex-column justify-content-evenly align-items-center log-in d-none">
+                <input class="user" placeholder="login" type="text">
+                <input class="password" placeholder="password" type="text">
+                <button class="btn btn-done">Done</button>
+                <button class="btn-cross">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 44 44" fill="none">
+                        <path d="M2.97546 2.97559L42 42" stroke="#323E42" stroke-width="3.42416" stroke-linecap="round"/>
+                        <path d="M2 41.0244L41.0245 2.00004" stroke="#323E42" stroke-width="3.42416" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
         </div>
     </main>
 </body>
