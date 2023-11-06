@@ -2,6 +2,7 @@ body{
     background: linear-gradient(to right, #323E42, #3e5f51);
     display: flex;
     justify-content: center;
+    font-family: 'Comfortaa', sans-serif;
 }
 
 /*  ----------------------------       DIVS         -------------------- */
@@ -43,11 +44,18 @@ input[type="text"]{
 /*----------------------------       TEXTS        ----------------------------------*/
 .infomoney-title{
     color: #92CAC0;
-    font-size: 80px;
+    font-size: 72px;
+    font-weight: 400;
+    text-transform: uppercase;
+    word-wrap: break-word
 }
 p{
-    font-size: 44px;
     color: #F5F5F5;
+    font-size: 40px;
+    font-family: Comfortaa;
+    font-weight: 400;
+    text-transform: lowercase;
+    word-wrap: break-word
 }
 
 /*-------------------------------        BUTTONS        --------------------------------------------*/
@@ -74,8 +82,9 @@ p{
     background-color: #323E42;
     z-index: -1;
 }
+
 .btn-sign:hover{
-    color: #ccc;
+    color: rgb(112, 140, 111)
 }
 .btn-sign:hover::after{
     background-color: #fff;
@@ -107,6 +116,8 @@ p{
     right: 17px;
     top: 17px;
 }
+
+
 
 /*---------------------      OTHER      --------------------------*/
 img{
