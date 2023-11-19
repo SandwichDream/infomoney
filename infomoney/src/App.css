@@ -1,0 +1,220 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&display=swap');
+
+body {
+    font-family: 'Comfortaa', sans-serif;
+    background: linear-gradient(to right, #323E42, #3e5f51);
+    padding-top: 50px;
+}
+
+.persons-list {
+    color: #F5F5F5;
+    width: 400px;
+    height: 800px;
+    padding: 50px;
+    padding-top: 0;
+    background-color: rgb(46, 51, 71, 50%);
+    border: 1px solid #92CAC0;
+    border-radius: 20px;
+    
+}
+.persons-list>ul{
+    border-bottom: 1px solid rgb(120, 182, 58, 50%);
+    padding: 0;
+    height: 700px;
+    overflow: scroll;
+}
+
+.scroll-0::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+.person {
+    list-style: none;
+    border: 1px solid #92CAC0;
+    margin: 30px 0;
+    border-radius: 20px;
+    word-wrap: break-word;
+    padding: 20px 10px 10px 30px;
+    background-color: #2E3346;
+    opacity: 0.8;
+    transition: opacity 200ms ease, background-color 200ms ease, color 200ms ease;
+}
+.person:hover {
+    opacity: 1;
+}
+.chosen-person {
+    background-color: #92CAC0;
+    color: #2E3346;
+}
+
+.person-info {
+    color: #F5F5F5;
+    width: 60%;
+    height: 800px;
+    padding: 50px;
+    background-color: rgb(46, 51, 71, 25%);
+    border: 1px solid #92CAC0;
+    overflow: scroll;
+    border-radius: 20px;
+}
+.person-info>header {
+    background-color: rgb(46, 51, 71, 50%);
+    border: 1px solid #92CAC0;
+    margin-bottom: 30px;
+    border-radius: 20px;
+    width: fit-content;
+}
+.person-info-nick {
+    padding: 10px 30px;
+}
+.person-info-nick h3 {
+    margin: 10px 0;
+}
+.person-info>header .icon {
+    margin: 5px;
+}
+
+
+.info-money {
+    border: 1px solid #92CAC0;
+    border-radius: 20px;
+    margin-bottom: 30px;
+    overflow: hidden;
+}
+.info-money .col {
+    padding: 10px 30px;
+}
+
+.app-modal, .app-modal-history, .app-modal-edit, .app-modal-history-edit {
+    background-color: rgba(245, 245, 245, 0.25);
+    position: absolute;
+    top: 0;
+    left: 0;
+    backdrop-filter: blur(2.5px);
+    z-index: 1;
+}
+.app-modal>div, .app-modal-history>div, .app-modal-edit>div, .app-modal-history-edit>div {
+    width: 600px;
+    height: fit-content;
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    transform: translate(-50%, -50%);
+    border-radius: 35px;
+    border: 2px solid #92CAC0;
+    background: rgba(245, 245, 245, 0.25);
+    backdrop-filter: blur(15px);
+    z-index: 2;
+    padding: 20px;
+}
+
+.periods {
+    height: 450px;
+    padding: 50px;
+    padding-top: 10px;
+    background-color: rgb(46, 51, 71, 50%);
+    border: 1px solid #92CAC0;
+    border-radius: 20px;
+    margin-top: 30px;
+}
+
+.periods>ul {
+    border-top: 1px solid rgb(120, 182, 58, 50%);
+    border-bottom: 1px solid rgb(120, 182, 58, 50%);
+    padding: 0;
+    height: 300px;
+    overflow: scroll;
+}
+
+.periods>button {
+    list-style: none;
+    font-weight: 600;
+    background: linear-gradient(263deg, #92CAC0 -2.21%, #9FBD86 95.62%);
+    margin-bottom: 30px;
+    padding: 20px 30px;
+    width: 100%;
+    border-radius: 20px;
+}
+
+.period {
+    list-style: none;
+    background-color: rgb(46, 51, 71, 50%);
+    border: 1px solid #92CAC0;
+    word-wrap: break-word;
+}
+
+.money {
+    width: 28%;
+}
+
+.disc {
+    width: 65%;
+}
+
+.controls-btns {
+    width: 7%;
+}
+
+.persons-list button {
+    list-style: none;
+    font-weight: 600;
+    background: linear-gradient(263deg, #92CAC0 -2.21%, #9FBD86 95.62%);
+    margin-bottom: 30px;
+    padding: 20px 30px;
+    width: 100%;
+    border-radius: 20px;
+}
+
+.app-modal footer button, .app-modal-history footer button, .app-modal-edit footer button, .app-modal-history-edit footer button {
+    list-style: none;
+    font-weight: 600;
+    background: linear-gradient(263deg, #92CAC0 -2.21%, #9FBD86 95.62%);
+    padding: 10px 15px;
+    width: 90px;
+    border-radius: 20px;
+}
+.app-modal footer button:hover {
+    color: white;
+}
+
+.app-modal>div h5, .app-modal-edit>div h5, .app-modal-history>div h5, .app-modal-history-edit>div h5 {
+    font-weight: 600;
+    user-select: none;
+}
+
+.app-modal main textarea, .app-modal-history main textarea {
+    resize: none;
+}
+
+.bix {
+    transform: scale(2);
+    transition: transform 200ms ease, color 200ms ease;
+}
+.bix:hover {
+    transform: scale(3);
+    color: rgb(122, 236, 137);
+}
+
+.icon {
+    transition: opacity 200ms ease;
+}
+.icon:hover {
+    opacity: 0.5;
+}
+
+.icon-plus {
+    transform: scale(1.5);
+}
+
+.red-placeholder::placeholder {
+    color: red;
+}
+
+.app-border-bottom {
+    border-bottom: 1px solid #92CAC0;
+}
+
+.app-border-right {
+    border-right: 1px solid #92CAC0;
+}
