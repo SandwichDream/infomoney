@@ -18,7 +18,7 @@ class AddPerson extends React.Component {
                 </header>
                 <main className="d-flex flex-column justify-content-center">
                     <div className="input-group mb-3">
-                        <input type="text" className="form-control" placeholder="Nick" maxLength="10"/>
+                        <input type="text" className="form-control" placeholder="Nick" maxLength="32"/>
                     </div>
                 </main>
                 <footer className="d-flex justify-content-end">

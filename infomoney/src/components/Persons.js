@@ -13,7 +13,7 @@ class Persons extends React.Component {
         }
     
         else {
-            return (<ul className="d-flex align-items-center user-select-none scroll-0">
+            return (<ul className="d-flex align-items-center justify-content-center scroll-0">
                 <h3>Person list is empty</h3>
             </ul>)
         }

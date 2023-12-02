@@ -9,7 +9,7 @@ body {
 .persons-list {
     color: #F5F5F5;
     width: 400px;
-    height: 800px;
+    height: 850px;
     padding: 50px;
     padding-top: 0;
     background-color: rgb(46, 51, 71, 50%);
@@ -20,7 +20,7 @@ body {
 .persons-list>ul{
     border-bottom: 1px solid rgb(120, 182, 58, 50%);
     padding: 0;
-    height: 700px;
+    height: 750px;
     overflow: scroll;
 }
 
@@ -43,7 +43,11 @@ body {
 .person:hover {
     opacity: 1;
 }
-.chosen-person {
+.person h3 {
+    width: 100%;
+}
+
+.chosen {
     background-color: #92CAC0;
     color: #2E3346;
 }
@@ -51,27 +55,50 @@ body {
 .person-info {
     color: #F5F5F5;
     width: 60%;
-    height: 800px;
+    height: 850px;
     padding: 50px;
     background-color: rgb(46, 51, 71, 25%);
     border: 1px solid #92CAC0;
     overflow: scroll;
     border-radius: 20px;
 }
-.person-info>header {
-    background-color: rgb(46, 51, 71, 50%);
+
+.person-info>header ul {
+    background: #2E3346;
+    list-style: none;
+    padding: 0;
     border: 1px solid #92CAC0;
-    margin-bottom: 30px;
     border-radius: 20px;
-    width: fit-content;
+    overflow: hidden;
 }
-.person-info-nick {
-    padding: 10px 30px;
+.person-info>header li {
+    padding: 12px;
+    opacity: 0.8;
+    transition: opacity 200ms ease, background-color 200ms ease, color 200ms ease;
 }
+.person-info>header li:hover {
+    opacity: 1;
+}
+
+.person-info>header button {
+    list-style: none;
+    font-weight: 600;
+    background: linear-gradient(263deg, #92CAC0 -2.21%, #9FBD86 95.62%);
+    padding: 10px 15px;
+    border-radius: 20px;
+    margin-bottom: 15px;
+    margin-left: 30px;
+    height: 70px;
+}
+
 .person-info-nick h3 {
     margin: 10px 0;
+    width: 100%;
 }
-.person-info>header .icon {
+.controls-btns-person{
+    width: fit-content;
+}
+.controls-btns-person>.icon {
     margin: 5px;
 }
 
@@ -86,7 +113,12 @@ body {
     padding: 10px 30px;
 }
 
-.app-modal, .app-modal-history, .app-modal-edit, .app-modal-history-edit {
+.app-modal,
+.app-modal-history,
+.app-modal-edit,
+.app-modal-history-edit,
+.app-modal-remove,
+.app-set-period {
     background-color: rgba(245, 245, 245, 0.25);
     position: absolute;
     top: 0;
@@ -94,7 +126,13 @@ body {
     backdrop-filter: blur(2.5px);
     z-index: 1;
 }
-.app-modal>div, .app-modal-history>div, .app-modal-edit>div, .app-modal-history-edit>div {
+.app-modal>div,
+.app-modal-history>div,
+.app-modal-edit>div,
+.app-modal-history-edit>div,
+.app-modal-remove>div,
+.app-set-period>div {
+    color: #2E3346;
     width: 600px;
     height: fit-content;
     position: absolute;
@@ -119,7 +157,7 @@ body {
     margin-top: 30px;
 }
 
-.periods>ul {
+.periods ul {
     border-top: 1px solid rgb(120, 182, 58, 50%);
     border-bottom: 1px solid rgb(120, 182, 58, 50%);
     padding: 0;
@@ -127,7 +165,7 @@ body {
     overflow: scroll;
 }
 
-.periods>button {
+.periods button {
     list-style: none;
     font-weight: 600;
     background: linear-gradient(263deg, #92CAC0 -2.21%, #9FBD86 95.62%);
@@ -145,11 +183,15 @@ body {
 }
 
 .money {
-    width: 28%;
+    width: 18%;
+}
+
+.date {
+    width: 100px;
 }
 
 .disc {
-    width: 65%;
+    width: 60%;
 }
 
 .controls-btns {
@@ -166,7 +208,12 @@ body {
     border-radius: 20px;
 }
 
-.app-modal footer button, .app-modal-history footer button, .app-modal-edit footer button, .app-modal-history-edit footer button {
+.app-modal footer button,
+.app-modal-history footer button,
+.app-modal-edit footer button,
+.app-modal-history-edit footer button,
+.app-modal-remove footer button,
+.app-set-period footer button {
     list-style: none;
     font-weight: 600;
     background: linear-gradient(263deg, #92CAC0 -2.21%, #9FBD86 95.62%);
@@ -174,11 +221,22 @@ body {
     width: 90px;
     border-radius: 20px;
 }
-.app-modal footer button:hover {
+.app-modal footer button:hover,
+.app-modal-history footer button:hover,
+.app-modal-edit footer button:hover,
+.app-modal-history-edit footer button:hover,
+.app-modal-remove footer button:hover,
+.app-set-period footer button:hover {
     color: white;
 }
 
-.app-modal>div h5, .app-modal-edit>div h5, .app-modal-history>div h5, .app-modal-history-edit>div h5 {
+.app-modal>div h5,
+.app-modal-edit>div h5,
+.app-modal-history>div h5,
+.app-modal-history-edit>div h5,
+.app-modal-remove>div h5,
+.app-set-period>div h5,
+.app-set-period>div h6 {
     font-weight: 600;
     user-select: none;
 }
@@ -194,6 +252,17 @@ body {
 .bix:hover {
     transform: scale(3);
     color: rgb(122, 236, 137);
+}
+
+.bs-boxes {
+    display: none;
+    position: absolute;
+    top: 20px;
+    color: rgb(122, 236, 137);
+    transition: opacity 200ms ease;
+}
+.bs-boxes:hover {
+    opacity: 0.8;
 }
 
 .icon {
@@ -217,4 +286,36 @@ body {
 
 .app-border-right {
     border-right: 1px solid #92CAC0;
+}
+
+@media (max-width: 1050px) {
+    .persons-list {
+        display: none;
+        position: absolute;
+        width: 95%;
+        z-index: 1;
+        backdrop-filter: blur(15px);
+    }
+    .persons-list>ul {
+        width: 100%;
+    }
+    .person-info {
+        width: 95%;
+    }
+    .periods, .person-info {
+        padding: 20px;
+    }
+    .app-modal>div,
+    .app-modal-history>div,
+    .app-modal-edit>div,
+    .app-modal-history-edit>div,
+    .app-modal-remove>div,
+    .app-set-period>div {
+        
+        flex-direction: column;
+        width: 400px;
+    }
+    .bs-boxes {
+        display: block;
+    }
 }
