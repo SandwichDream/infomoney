@@ -6,6 +6,7 @@ import AddHistory from './components/AddHistory';
 import EditPerson from './components/EditPerson';
 import EditHistory from './components/EditHistory';
 import Remove from './components/Remove';
+import FirstPage from './components/FirstPage';
 
 import { BiPlus } from "react-icons/bi";
 import { BsBoxes } from "react-icons/bs";
@@ -36,29 +37,33 @@ class App extends React.Component {
     
     render() {
 
-        return (<div className="App d-flex justify-content-evenly user-select-none">
+        return (<div className="App user-select-none">
+            
+            <div className="d-flex justify-content-evenly app-fun d-none">
+                <BsBoxes className="bs-boxes" onClick={() => {
+                    let el = document.querySelector(".persons-list");
+                    this.state.boxes ? el.style.display = "block" : el.style.display = "none";
+                    this.setState({boxes: !this.state.boxes});
+                }}/>
 
-            <BsBoxes className="bs-boxes" onClick={() => {
-                let el = document.querySelector(".persons-list");
-                this.state.boxes ? el.style.display = "block" : el.style.display = "none";
-                this.setState({boxes: !this.state.boxes});
-            }}/>
+                <div className="persons-list">
 
-            <div className="persons-list">
+                    <Persons persons={this.state.persons} setIdSelector={this.setIdSelector} edit={this.editPerson}/>
+                    <button className="btn" onClick={() => {
+                        document.querySelector(".app-modal").classList.remove("d-none");
+                    }}><BiPlus className="icon-plus"/> Add Person</button>
 
-                <Persons persons={this.state.persons} setIdSelector={this.setIdSelector} edit={this.editPerson}/>
-                <button className="btn" onClick={() => {
-                    document.querySelector(".app-modal").classList.remove("d-none");
-                }}><BiPlus className="icon-plus"/> Add Person</button>
+                </div>
+                <PersonInfo persons={this.state.persons} selectPerson={this.selectPerson} setIdSelector={this.setIdSelector} setPeriodIdSelector={this.setPeriodIdSelector} removeHistory={this.removeHistory}/>
 
+                <AddPerson addPerson={this.addPerson} edit={this.editPerson}/>
+                <AddHistory addHistory={this.addHistory}/>
+                <EditPerson editPerson={this.editPerson}/>
+                <EditHistory editHistory={this.editHistory}/>
+                <Remove selectPerson={this.selectPerson} remove={this.removePerson}/>
             </div>
-            <PersonInfo persons={this.state.persons} selectPerson={this.selectPerson} setIdSelector={this.setIdSelector} setPeriodIdSelector={this.setPeriodIdSelector} removeHistory={this.removeHistory}/>
-
-            <AddPerson addPerson={this.addPerson} edit={this.editPerson}/>
-            <AddHistory addHistory={this.addHistory}/>
-            <EditPerson editPerson={this.editPerson}/>
-            <EditHistory editHistory={this.editHistory}/>
-            <Remove selectPerson={this.selectPerson} remove={this.removePerson}/>
+            
+            <FirstPage/>
             
         </div>);
     }
