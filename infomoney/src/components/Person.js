@@ -13,19 +13,8 @@ class Person extends React.Component {
                 }
                 el.target.closest('.person').classList.add("chosen");
 
-            }}><h3>{this.props.person.nick}: {this.balance()}</h3></li>
+            }}><h3>{this.props.person.name}</h3></li>
         );
-    }
-
-    balance() {
-        const periods = this.props.person.periods;
-        let money = 0;
-
-        for (let i = 0; i < periods.length; i++) {
-            money += periods[i].money;
-        }
-
-        return money;
     }
 }
 

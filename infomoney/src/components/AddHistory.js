@@ -70,6 +70,7 @@ class AddHistory extends React.Component {
                         e.preventDefault();
                         let money = document.querySelector(".app-modal-history main input");
                         let date = `${document.querySelector(".app-modal-history .select-date").value}.${parseInt(document.querySelector(".app-modal-history .select-month").value) + 1}.${document.querySelector(".app-modal-history .select-year").value}`;
+                        console.log(date);
                         let disc = document.querySelector(".app-modal-history main textarea");
                         let id = Date.now();
 

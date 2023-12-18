@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import Period from "./Period";
 
 class PersonHistory extends React.Component {
@@ -19,8 +20,9 @@ class PersonHistory extends React.Component {
         }
     }
 
-    selectedPeriods() {
-        let periods = this.props.person.periods;
+    async selectedPeriods() {
+        const result = await axios.get(`http://localhost:8080/api/v1/protected/transaction/${this.props.person.id}`);
+        const periods = result.data.profileTransactions;
         const currentDate = new Date();
 
         const dateFromParts = this.props.dateFrom.split("-");
@@ -76,53 +78,6 @@ class PersonHistory extends React.Component {
         else {
             return periods;
         }
-        // else if (this.props.selectedPeriod === 2) {
-        //     for (let i = 0; i < periods.length; i++) {
-        //         const date = periods[i].date.split(".");
-        //         if(periods[i].money >= 0 && parseInt(date[1]) - 1 === currentDate.getMonth() && parseInt(date[2]) === currentDate.getFullYear()) {
-        //             count += periods[i].money;
-        //         }
-        //     }
-        // }
-        // else if (this.props.selectedPeriod === 3) {
-        //     for (let i = 0; i < periods.length; i++) {
-        //         const date = periods[i].date.split(".");
-        //         if(periods[i].money >= 0 && parseInt(date[2]) === currentDate.getFullYear()) {
-        //             count += periods[i].money;
-        //         }
-        //     }
-        // }
-        // else if (this.props.selectedPeriod === 4) {
-        //     const elementsForPeriod = periods.filter((period) => {
-
-        //         const periodDateParts = period.date.split(".")
-        //         const periodDate = new Date(periodDateParts[2], periodDateParts[1] - 1, periodDateParts[0]);
-
-        //         if (dateFrom > dateTo) {
-        //             return (
-        //                 periodDate <= dateFrom &&
-        //                 periodDate >= dateTo
-        //             );
-        //         }
-        //         return (
-        //             periodDate >= dateFrom &&
-        //             periodDate <= dateTo
-        //         );
-        //     });
-        
-        //     for (let i = 0; i < elementsForPeriod.length; i++) {
-        //         if (elementsForPeriod[i].money >= 0) {
-        //             count += elementsForPeriod[i].money;
-        //         }
-        //     }
-        // }
-        // else {
-        //     for (let i = 0; i < periods.length; i++) {
-        //         if(periods[i].money >= 0) {
-        //             count += periods[i].money;
-        //         }
-        //     }
-        // }
     }
 }
 

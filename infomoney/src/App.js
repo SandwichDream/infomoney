@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import Persons from './components/Persons';
 import PersonInfo from './components/PersonInfo';
 import AddPerson from './components/AddPerson';
@@ -18,6 +19,9 @@ class App extends React.Component {
 
     constructor(props) {
         super(props);
+
+        this.setInitialState();
+
         this.state = {
             persons: [],
             selectedPersonId: 0,
@@ -68,6 +72,13 @@ class App extends React.Component {
         </div>);
     }
 
+    async setInitialState() {
+        const result = await axios.get("http://localhost:8080/api/v1/protected/transaction");
+
+        this.setState({ persons: result.data.profiles });
+        console.log(this.state);
+    }
+
     componentDidMount() {
         this.checkWindowWidth();
         window.addEventListener('resize', this.checkWindowWidth);
@@ -87,36 +98,48 @@ class App extends React.Component {
         }
     }
 
-    addPerson(id, nick) {
+    async addPerson(nick) {
+        await axios.post("http://localhost:8080/api/v1/protected/profile", {name: nick});
+        this.setInitialState();
+    }
+
+    async editPerson(nick) {
+        await axios.patch(`http://localhost:8080/api/v1/protected/profile/${this.state.selectedPersonId}`, {name: nick});
+        this.setInitialState();
+    }
+
+    async removePerson() {
+        await axios.delete(`http://localhost:8080/api/v1/protected/profile/${this.state.selectedPersonId}`);
+        this.setInitialState();
+    }
+
+    async addHistory(id, money, date, disc) {
+        const person = this.selectPerson();
+        const updatedPersons = this.state.persons.map(el => {
+            if (el.id === person.id) {
+                return {
+                    ...el,
+                    periods: [
+                        ...el.periods,
+                        {
+                            id: id,
+                            money: money,
+                            date: date,
+                            disc: disc
+                        }
+                    ]
+                };
+            }
+            return el;
+        });
+    
         this.setState({
-            persons: [
-                ...this.state.persons,
-                {
-                    id: id,
-                    nick: nick,
-                    periods: []
-                }
-            ],
+            persons: updatedPersons,
             selectedPersonId: this.state.selectedPersonId,
             selectedPeriodId: this.state.selectedPeriodId
         });
-    }
-
-    editPerson(nick) {
-        this.setState({
-            persons: this.state.persons.map(el => {
-                if (el.id === this.state.selectedPersonId) {
-                    return {
-                        id: el.id,
-                        nick: nick,
-                        periods: el.periods
-                    }
-                }
-                return el;
-            }),
-            selectedPersonId: this.state.selectedPersonId,
-            selectedPeriodId: this.state.selectedPeriodId
-        })
+        await axios.post(`http://localhost:8080/api/v1/protected/transaction/${person.id}`);
+        this.setInitialState();
     }
 
     editHistory(money, date, disc) {
@@ -148,51 +171,6 @@ class App extends React.Component {
         });
     }
 
-    addHistory(id, money, date, disc) {
-        const person = this.selectPerson();
-        const updatedPersons = this.state.persons.map(el => {
-            if (el.id === person.id) {
-                return {
-                    ...el,
-                    periods: [
-                        ...el.periods,
-                        {
-                            id: id,
-                            money: money,
-                            date: date,
-                            disc: disc
-                        }
-                    ]
-                };
-            }
-            return el;
-        });
-    
-        this.setState({
-            persons: updatedPersons,
-            selectedPersonId: this.state.selectedPersonId,
-            selectedPeriodId: this.state.selectedPeriodId
-        });
-    }
-
-    selectPerson() {
-        let persons = this.state.persons;
-        for (let i = 0; i < persons.length; i++) {
-            if (persons[i].id === this.state.selectedPersonId) {
-                return persons[i];
-            }
-        }
-        return {id: 0, nick: "InfoMoney"};
-    }
-
-    removePerson() {
-        this.setState({
-            persons: this.state.persons.filter((el) => el.id !== this.state.selectedPersonId),
-            selectedPersonId: this.state.selectedPersonId,
-            selectedPeriodId: this.state.selectedPeriodId
-        })
-    }
-
     removeHistory(id) {
         const person = this.selectPerson();
         const updatedPersons = this.state.persons.map(el => {
@@ -212,18 +190,24 @@ class App extends React.Component {
         })
     }
 
+    selectPerson() {
+        let persons = this.state.persons;
+        for (let i = 0; i < persons.length; i++) {
+            if (persons[i].id === this.state.selectedPersonId) {
+                return persons[i];
+            }
+        }
+        return {id: 0, name: "InfoMoney"};
+    }
+
     setIdSelector(id) {
         this.setState({
-            persons: this.state.persons,
-            selectedPersonId: id,
-            selectedPeriodId: this.state.selectedPeriodId
+            selectedPersonId: id
         })
     }
 
     setPeriodIdSelector(id) {
         this.setState({
-            persons: this.state.persons,
-            selectedPersonId: this.state.selectedPersonId,
             selectedPeriodId: id
         })
     }

@@ -219,7 +219,8 @@ body {
 .app-modal-remove footer button,
 .app-set-period footer button,
 .app-modal-sign-up footer button,
-.app-modal-log-in footer button {
+.app-modal-log-in footer button,
+.skip {
     list-style: none;
     font-weight: 600;
     background: linear-gradient(263deg, #92CAC0 -2.21%, #9FBD86 95.62%);
@@ -234,7 +235,8 @@ body {
 .app-modal-remove footer button:hover,
 .app-set-period footer button:hover,
 .app-modal-sign-up footer button:hover,
-.app-modal-log-in footer button:hover {
+.app-modal-log-in footer button:hover,
+.skip {
     color: white;
 }
 
@@ -405,15 +407,6 @@ img{
 
 .ml-140{
     margin-left: 140px;
-}
-
-.skip {
-    color: #5d808b;
-    font-weight: 600;
-    transition: color 200ms ease;
-}
-.skip:hover {
-    color: #799ca7;
 }
 
 /* ----------------------- */

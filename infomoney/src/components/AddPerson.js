@@ -24,11 +24,10 @@ class AddPerson extends React.Component {
                 <footer className="d-flex justify-content-end">
                     <button className="btn" onClick={() => {
                         let nick = document.querySelector(".app-modal main input");
-                        let id = Date.now();
 
                         if (nick.value !== "") {
                             
-                            this.props.addPerson(id, nick.value);
+                            this.props.addPerson(nick.value);
 
                             nick.placeholder = "Nick";
                             nick.classList.remove("red-placeholder");
