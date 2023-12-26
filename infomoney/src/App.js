@@ -108,15 +108,12 @@ class App extends React.Component {
             await this.setInitialState();
         } catch (error) {
             if (error.response) {
-                // Помилкова відповідь від сервера (наприклад, 400, 500)
                 console.error('Server Error:', error.response.data);
                 this.setState({ errorMessage: error.response.data });
                 document.querySelector(".app-same-name").classList.remove("d-none");
             } else if (error.request) {
-                // Немає відповіді від сервера
                 console.error('No response from server:', error.request);
             } else {
-                // Щось інше викликало помилку
                 console.error('Error:', error.message);
             }
         }
@@ -132,14 +129,14 @@ class App extends React.Component {
         await this.setInitialState();
     }
 
-    async addHistory(money, date, disc) {
+    async addHistory(money, type, date, disc) {
         await axios.post(`http://localhost:8080/api/v1/protected/transaction/${this.state.selectedPersonId}`, {
             description: disc,
             amount: money,
-            type: "INCOME",
+            type: type,
             createAt: date
         });
-        this.setInitialState();
+        await this.setInitialState();
     }
 
     async editHistory(money, date, disc) {
@@ -148,32 +145,8 @@ class App extends React.Component {
             amount: money,
             type: "INCOME",
             createAt: date
-        })
-        
-        const person = this.selectPerson();
-        const updatedPersons = this.state.persons.map(el => {
-            if (el.id === person.id) {
-                return {
-                    ...el,
-                    periods: person.periods.map(el2 => {
-                        if (el2.id === this.state.selectedPeriodId) {
-                            return {
-                                id: this.state.selectedPeriodId,
-                                money: money,
-                                date: date,
-                                disc: disc
-                            }
-                        }
-                        return el2;
-                    })
-                }
-            }
-            return el;
-        })
-
-        this.setState({
-            persons: updatedPersons
         });
+        await this.setInitialState();
     }
 
     removeHistory(id) {
