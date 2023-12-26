@@ -126,44 +126,32 @@ class App extends React.Component {
 
     async removePerson() {
         await axios.delete(`http://localhost:8080/api/v1/protected/profile/${this.state.selectedPersonId}`);
-        await this.setInitialState();
+        this.setState({ updatesetInitialStatePI: true });
     }
 
-    async addHistory(money, type, date, disc) {
+    async addHistory(money, type, date, desc) {
         await axios.post(`http://localhost:8080/api/v1/protected/transaction/${this.state.selectedPersonId}`, {
-            description: disc,
+            description: desc,
             amount: money,
-            type: type,
-            createAt: date
+            type,
+            createdAt: date
         });
-        await this.setInitialState();
+        this.setState({ updatesetInitialStatePI: true });
     }
 
-    async editHistory(money, date, disc) {
+    async editHistory(money, type, date, desc) {
         await axios.put(`http://localhost:8080/api/v1/protected/transaction/${this.state.selectedPersonId}/update/${this.state.selectedPeriodId}`, {
-            description: disc,
+            description: desc,
             amount: money,
-            type: "INCOME",
-            createAt: date
+            type,
+            createdAt: date
         });
-        await this.setInitialState();
+        this.setState({ updatesetInitialStatePI: true });
     }
 
-    removeHistory(id) {
-        const person = this.selectPerson();
-        const updatedPersons = this.state.persons.map(el => {
-            if (el.id === person.id) {
-                return {
-                    ...el,
-                    periods: el.periods.filter(el2 => el2.id !== id)
-                };
-            }
-            return el;
-        });
-
-        this.setState({
-            persons: updatedPersons
-        })
+    async removeHistory(id) {
+        await axios.delete(`http://localhost:8080/api/v1/protected/transaction/${this.state.selectedPersonId}/update/${id}`);
+        this.setState({ updatesetInitialStatePI: true });
     }
 
     selectPerson() {

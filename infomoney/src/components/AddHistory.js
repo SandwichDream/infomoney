@@ -31,8 +31,8 @@ class AddHistory extends React.Component {
                     </div>
                     <div className="d-flex">
                         <div className="form-check m-2">
-                            <input className="form-check-input" type="radio" name="AddHistoryRadio" id="AddHistoryRadio2" defaultChecked/>
-                            <label className="form-check-label" htmlFor="AddHistoryRadio2">
+                            <input className="form-check-input" type="radio" name="AddHistoryRadio" id="AddHistoryRadio1" defaultChecked/>
+                            <label className="form-check-label" htmlFor="AddHistoryRadio1">
                                 Profit
                             </label>
                         </div>
@@ -76,7 +76,7 @@ class AddHistory extends React.Component {
                         </select>
                     </div>
                     <div className="input-group mb-3">
-                        <textarea rows="3" placeholder="Disc" className="form-control scroll-0" maxLength="150"></textarea>
+                        <textarea rows="3" placeholder="Desc" className="form-control scroll-0" maxLength="150"></textarea>
                     </div>
                 </main>
                 <footer className="d-flex justify-content-end">
@@ -84,15 +84,15 @@ class AddHistory extends React.Component {
                         e.preventDefault();
                         const money = document.querySelector(".app-modal-history main input[type='text']");
                         const date = `${document.querySelector(".app-modal-history .select-date").value}.${parseInt(document.querySelector(".app-modal-history .select-month").value) + 1}.${document.querySelector(".app-modal-history .select-year").value}`;
-                        const disc = document.querySelector(".app-modal-history main textarea");
+                        const desc = document.querySelector(".app-modal-history main textarea");
 
                         const type = document.querySelectorAll(".app-modal-history main input[type='radio']")[0].checked ? "INCOME" : "OUTCOME";
 
                         if (money.value !== "" && !isNaN(money.value)) {
-                            if (disc.value === "") {
-                                disc.value = "-";
+                            if (desc.value === "") {
+                                desc.value = "-";
                             }
-                            this.props.addHistory(parseInt(money.value), type, date, disc.value);
+                            this.props.addHistory(parseInt(money.value), type, date, desc.value);
                             document.querySelector(".app-modal-history").classList.add("d-none");
                             money.placeholder = "Money";
                             money.classList.remove("red-placeholder");

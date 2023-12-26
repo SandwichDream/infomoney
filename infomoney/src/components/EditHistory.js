@@ -26,8 +26,22 @@ class EditHistory extends React.Component {
                     }}/>
                 </header>
                 <main className="d-flex flex-column justify-content-center">
-                    <div className="input-group mb-3">
+                    <div className="input-group">
                         <input type="text" className="form-control" placeholder="Money" maxLength=""/>
+                    </div>
+                    <div className="d-flex">
+                        <div className="form-check m-2">
+                            <input className="form-check-input" type="radio" name="EditHistoryRadio" id="EditHistoryRadio1" defaultChecked/>
+                            <label className="form-check-label" htmlFor="EditHistoryRadio1">
+                                Profit
+                            </label>
+                        </div>
+                        <div className="form-check m-2">
+                            <input className="form-check-input" type="radio" name="EditHistoryRadio" id="EditHistoryRadio2"/>
+                            <label className="form-check-label" htmlFor="EditHistoryRadio2">
+                                Expenses
+                            </label>
+                        </div>
                     </div>
                     <div className="d-flex mb-3">
                         <select className="form-select select-date" defaultValue={currentDate.getDate()}>
@@ -62,21 +76,23 @@ class EditHistory extends React.Component {
                         </select>
                     </div>
                     <div className="input-group mb-3">
-                        <textarea rows="3" placeholder="Disc" className="form-control scroll-0" maxLength="150"></textarea>
+                        <textarea rows="3" placeholder="Desc" className="form-control scroll-0" maxLength="150"></textarea>
                     </div>
                 </main>
                 <footer className="d-flex justify-content-end">
                     <button className="btn" onClick={(e) => {
                         e.preventDefault();
-                        let money = document.querySelector(".app-modal-history-edit main input");
-                        let date = `${document.querySelector(".app-modal-history-edit .select-date").value}.${parseInt(document.querySelector(".app-modal-history-edit .select-month").value) + 1}.${document.querySelector(".app-modal-history-edit .select-year").value}`;
-                        let disc = document.querySelector(".app-modal-history-edit main textarea");
+                        const money = document.querySelector(".app-modal-history-edit main input");
+                        const date = `${document.querySelector(".app-modal-history-edit .select-date").value}.${parseInt(document.querySelector(".app-modal-history-edit .select-month").value) + 1}.${document.querySelector(".app-modal-history-edit .select-year").value}`;
+                        const desc = document.querySelector(".app-modal-history-edit main textarea");
+                        
+                        const type = document.querySelectorAll(".app-modal-history-edit main input[type='radio']")[0].checked ? "INCOME" : "OUTCOME";
 
                         if (money.value !== "") {
-                            if (disc.value === "") {
-                                disc.value = "-";
+                            if (desc.value === "") {
+                                desc.value = "-";
                             }
-                            this.props.editHistory(parseInt(money.value), date, disc.value);
+                            this.props.editHistory(parseInt(money.value), type, date, desc.value);
                             document.querySelector(".app-modal-history-edit").classList.add("d-none");
                             money.placeholder = "Money";
                             money.classList.remove("red-placeholder");
