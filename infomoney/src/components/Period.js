@@ -7,8 +7,8 @@ class Period extends React.Component {
 
         const period = this.props.period;
 
-        const dateParts = period.date.split(".")
-        const date = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
+        const [yearP, monthP, dayP] = period.createdAt;
+        const date = new Date(yearP, monthP - 1, dayP);
 
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -17,9 +17,9 @@ class Period extends React.Component {
         const formattedDate = `${day}-${month}-${year}`;
 
         return(<li className="d-flex justify-content-evenly period">
-            <div className="d-flex align-items-center p-2 app-border-right money">{period.money}</div>
+            <div className="d-flex align-items-center p-2 app-border-right money">{period.amount}</div>
             <div className="d-flex align-items-center p-2 app-border-right date">{formattedDate}</div>
-            <div className="p-2 app-border-right disc">{period.disc}</div>
+            <div className="p-2 app-border-right disc">{period.description}</div>
             <div className="d-flex flex-column justify-content-evenly m-2 control-bnts">
                 <BsTrashFill className="icon m-1" onClick={() => this.props.remove(period.id)}/>
                 <BsFillPencilFill className="icon m-1" onClick={() => {

@@ -11,12 +11,6 @@ class SetPeriod extends React.Component {
         const month = String(currentDate.getMonth() + 1).padStart(2, '0');
         const day = String(currentDate.getDate()).padStart(2, '0');
 
-        // let dateFromParts = this.props.dateFrom.split("-");
-        // let dateFrom = `${dateFromParts[2]}-${dateFromParts[1]}-${dateFromParts[0]}`;
-
-        // let dateToParts = this.props.dateTo.split("-");
-        // let dateTo = `${dateToParts[2]}-${dateToParts[1]}-${dateToParts[0]}`;
-
         const formattedDate = `${year}-${month}-${day}`;
 
         return(<div className="app-set-period modal-fullscreen d-none">
@@ -46,9 +40,10 @@ class SetPeriod extends React.Component {
                         }
 
                         const dateInputs = document.querySelectorAll(".app-set-period main input");
-
+                        
                         this.props.setDateFrom(dateInputs[0].value);
                         this.props.setDateTo(dateInputs[1].value);
+                        this.props.setInitialStatePI();
 
                         document.querySelector(".app-set-period").classList.add("d-none");
 
@@ -56,7 +51,7 @@ class SetPeriod extends React.Component {
                 </footer>
             </div>
         </div>)
-    }   
+    }
 }
 
 export default SetPeriod;

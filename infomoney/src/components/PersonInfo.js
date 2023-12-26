@@ -23,17 +23,20 @@ class PersonInfo extends React.Component {
             dateFrom: formattedDate,
             dateTo: formattedDate,
             totalProfits: 0,
-            totalExpenses: 0
+            totalExpenses: 0,
+            personProfits: 0,
+            personExpenses: 0,
+            allTransactions: [],
+            personTransactions: []
         }
         this.setDateFrom = this.setDateFrom.bind(this);
         this.setDateTo = this.setDateTo.bind(this);
+        this.setInitialState = this.setInitialState.bind(this);
     }
 
     render() {
 
         const person = this.props.selectPerson();
-        const profits = person.id > 0 ? this.personProfits(person.id) : null;
-        const expenses = person.id > 0 ? this.personExpenses(person.id) : null;
 
         if (person.id === 0) {
             return (<main className="person-info scroll-0">
@@ -41,6 +44,7 @@ class PersonInfo extends React.Component {
                 <ul className="d-flex">
                     <li className="app-border-right period-btns" onClick={(el) => {
                         this.setState({selectedPeriod: 1});
+                        this.setInitialState();
 
                         let btns = document.querySelectorAll(".period-btns");
                         for (let i = 0; i < btns.length; i++) {
@@ -51,6 +55,7 @@ class PersonInfo extends React.Component {
                     }}>day</li>
                     <li className="app-border-right period-btns" onClick={(el) => {
                         this.setState({selectedPeriod: 2});
+                        this.setInitialState();
 
                         let btns = document.querySelectorAll(".period-btns");
                         for (let i = 0; i < btns.length; i++) {
@@ -61,6 +66,7 @@ class PersonInfo extends React.Component {
                     }}>month</li>
                     <li className="app-border-right period-btns" onClick={(el) => {
                         this.setState({selectedPeriod: 3});
+                        this.setInitialState();
 
                         let btns = document.querySelectorAll(".period-btns");
                         for (let i = 0; i < btns.length; i++) {
@@ -71,6 +77,7 @@ class PersonInfo extends React.Component {
                     }}>year</li>
                     <li className="period-btns chosen" onClick={(el) => {
                         this.setState({selectedPeriod: 0});
+                        this.setInitialState();
 
                         let btns = document.querySelectorAll(".period-btns");
                         for (let i = 0; i < btns.length; i++) {
@@ -102,7 +109,7 @@ class PersonInfo extends React.Component {
                         </div>
                     </div>
                 </main>
-                <SetPeriod setDateFrom={this.setDateFrom} setDateTo={this.setDateTo}/>
+                <SetPeriod setInitialStatePI={this.setInitialState} setDateFrom={this.setDateFrom} setDateTo={this.setDateTo}/>
             </main>)
         }
         return (<main className="person-info scroll-0">
@@ -110,6 +117,7 @@ class PersonInfo extends React.Component {
                 <ul className="d-flex">
                     <li className="app-border-right period-btns" onClick={(el) => {
                         this.setState({selectedPeriod: 1});
+                        this.setInitialState();
 
                         let btns = document.querySelectorAll(".period-btns");
                         for (let i = 0; i < btns.length; i++) {
@@ -120,6 +128,7 @@ class PersonInfo extends React.Component {
                     }}>day</li>
                     <li className="app-border-right period-btns" onClick={(el) => {
                         this.setState({selectedPeriod: 2});
+                        this.setInitialState();
 
                         let btns = document.querySelectorAll(".period-btns");
                         for (let i = 0; i < btns.length; i++) {
@@ -130,6 +139,7 @@ class PersonInfo extends React.Component {
                     }}>month</li>
                     <li className="app-border-right period-btns" onClick={(el) => {
                         this.setState({selectedPeriod: 3});
+                        this.setInitialState();
 
                         let btns = document.querySelectorAll(".period-btns");
                         for (let i = 0; i < btns.length; i++) {
@@ -140,6 +150,7 @@ class PersonInfo extends React.Component {
                     }}>year</li>
                     <li className="period-btns chosen" onClick={(el) => {
                         this.setState({selectedPeriod: 0});
+                        this.setInitialState();
 
                         let btns = document.querySelectorAll(".period-btns");
                         for (let i = 0; i < btns.length; i++) {
@@ -174,7 +185,7 @@ class PersonInfo extends React.Component {
                     <h4>{person.name}'s info:</h4>
                     <div className="d-flex justify-content-evenly m-2 controls-btns-person">
                         <BsFillPencilFill className="icon" onClick={() => {
-                            document.querySelector(".app-modal-edit main input").value = person.nick;
+                            document.querySelector(".app-modal-edit main input").value = person.name;
                             document.querySelector(".app-modal-edit").classList.remove("d-none");
                         }}/>
                         <BsTrashFill className="icon" onClick={() => document.querySelector(".app-modal-remove").classList.remove("d-none")}/>
@@ -191,13 +202,13 @@ class PersonInfo extends React.Component {
                 <div className="container info-money">
                     <div className="row row-cols-2">
                         <div className="col app-border-bottom app-border-right">number of profits:</div>
-                        <div className="col text-success app-border-bottom">{profits}</div>
+                        <div className="col text-success app-border-bottom">{this.state.personProfits}</div>
 
                         <div className="col app-border-bottom app-border-right">number of losses:</div>
-                        <div className="col text-danger app-border-bottom">{expenses}</div>
+                        <div className="col text-danger app-border-bottom">{this.state.personExpenses}</div>
 
                         <div className="col app-border-right">total:</div>
-                        <div className="col">{profits + expenses}</div>
+                        <div className="col">{this.state.personProfits - this.state.personExpenses}</div>
                     </div>
                 </div>
                 <div className="periods">
@@ -205,7 +216,7 @@ class PersonInfo extends React.Component {
                         <h3>History</h3>
                     </header>
                     <main>
-                        <PersonHistory person={person} selectedPeriod={this.state.selectedPeriod} dateFrom={this.state.dateFrom} dateTo={this.state.dateTo} setPeriodIdSelector={this.props.setPeriodIdSelector} remove={this.props.removeHistory}/>
+                        <PersonHistory person={person} transactions={this.state.personTransactions} selectedPeriod={this.state.selectedPeriod} dateFrom={this.state.dateFrom} dateTo={this.state.dateTo} setPeriodIdSelector={this.props.setPeriodIdSelector} remove={this.props.removeHistory}/>
                     </main>
                     <footer className="d-flex">
                         <button className="btn m-1" onClick={() => {
@@ -214,15 +225,42 @@ class PersonInfo extends React.Component {
                     </footer>
                 </div>
             </main>
-            <SetPeriod setDateFrom={this.setDateFrom} setDateTo={this.setDateTo} dateFrom={this.state.dateFrom} dateTo={this.state.dateTo}/>
+            <SetPeriod setInitialStatePI={this.setInitialState} setDateFrom={this.setDateFrom} setDateTo={this.setDateTo} dateFrom={this.state.dateFrom} dateTo={this.state.dateTo}/>
         </main>)
     }
 
     async componentDidMount() {
-        const totalProfits = await this.totalProfits();
-        const totalExpenses = await this.totalExpenses();
-    
-        this.setState({ totalProfits: totalProfits, totalExpenses: totalExpenses });
+        await this.setInitialState();
+    }
+
+    async componentDidUpdate() {
+        if (this.props.updatesetInitialState) {
+            await this.setInitialState();
+            this.props.setBoolUpdatePI(false);
+        }
+    }
+
+    async setInitialState() {
+        const result = await this.props.setInitialStateApp();
+        const person = this.props.selectPerson();
+
+        const allTransactions = await this.allTransactions(result);
+        const totalProfits = this.totalProfits(allTransactions);
+        const totalExpenses = this.totalExpenses(allTransactions);
+
+        this.setState({ totalProfits, totalExpenses, allTransactions });
+
+        if (person.id > 0) {
+            const personTransactions = await this.personTransactions(person);
+            const personProfits = this.totalProfits(personTransactions);
+            const personExpenses = this.totalExpenses(personTransactions);
+
+            console.log(personTransactions);
+            console.log(personProfits);
+            console.log(personExpenses);
+
+            this.setState({ personTransactions, personProfits, personExpenses });
+        }
     }
 
     setDateFrom = (date) => {
@@ -239,10 +277,32 @@ class PersonInfo extends React.Component {
         this.setState({ selectedPeriod: 4, dateTo: formattedDate });
     }
 
-    async personProfits(id) {
-        const result = await axios.get(`http://localhost:8080/api/v1/protected/transaction/${id}`);
-        const periods = result.data.profileTransactions;
+    async personTransactions(person) {
+        try {
+            const result = await axios.get(`http://localhost:8080/api/v1/protected/transaction/${person.id}`);
+            return result.data.profileTransactions;
+        } catch (error) {
+            console.error(`Error fetching transactions for person with ID ${person.id}:`, error);
+            return [];
+        }
+    }
+
+    async allTransactions(persons) {
+        try {
+            const transactionPromises = persons.map(async (person) => await this.personTransactions(person));
+    
+            const allPersonTransactions = await Promise.all(transactionPromises);
+            return allPersonTransactions.flat();
+        } catch (error) {
+            console.error("Error fetching transactions for persons:", error);
+            return [];
+        }
+    }
+
+    totalProfits(transactions) {
+
         let count = 0;
+
         const currentDate = new Date();
 
         const dateFromParts = this.state.dateFrom.split("-");
@@ -251,33 +311,32 @@ class PersonInfo extends React.Component {
         const dateToParts = this.state.dateTo.split("-");
         const dateTo = new Date(dateToParts[2], dateToParts[1] - 1, dateToParts[0]);
 
-        // currentDate like "1.1.1111"
         if (this.state.selectedPeriod === 1) {
-            for (let i = 0; i < periods.length; i++) {
-                const [year, month, day] = periods[i].createdAt;
-                if(periods[i].type === "INCOME" && parseInt(day) === currentDate.getDate() && parseInt(month) - 1 === currentDate.getMonth() && parseInt(year) === currentDate.getFullYear()) {
-                    count += periods[i].amount;
+            for (let i = 0; i < transactions.length; i++) {
+                const [year, month, day] = transactions[i].createdAt;
+                if(transactions[i].type === "INCOME" && parseInt(day) === currentDate.getDate() && parseInt(month) - 1 === currentDate.getMonth() && parseInt(year) === currentDate.getFullYear()) {
+                    count += transactions[i].amount;
                 }
             }
         }
         else if (this.state.selectedPeriod === 2) {
-            for (let i = 0; i < periods.length; i++) {
-                const [year, month] = periods[i].createdAt;
-                if(periods[i].type === "INCOME" && parseInt(month) - 1 === currentDate.getMonth() && parseInt(year) === currentDate.getFullYear()) {
-                    count += periods[i].amount;
+            for (let i = 0; i < transactions.length; i++) {
+                const [year, month] = transactions[i].createdAt;
+                if(transactions[i].type === "INCOME" && parseInt(month) - 1 === currentDate.getMonth() && parseInt(year) === currentDate.getFullYear()) {
+                    count += transactions[i].amount;
                 }
             }
         }
         else if (this.state.selectedPeriod === 3) {
-            for (let i = 0; i < periods.length; i++) {
-                const [year] = periods[i].createdAt;
-                if(periods[i].type === "INCOME" && parseInt(year) === currentDate.getFullYear()) {
-                    count += periods[i].amount;
+            for (let i = 0; i < transactions.length; i++) {
+                const [year] = transactions[i].createdAt;
+                if(transactions[i].type === "INCOME" && parseInt(year) === currentDate.getFullYear()) {
+                    count += transactions[i].amount;
                 }
             }
         }
         else if (this.state.selectedPeriod === 4) {
-            const elementsForPeriod = periods.filter((period) => {
+            const elementsForPeriod = transactions.filter((period) => {
                 const [year, month, day] = period.createdAt;
                 const periodDate = new Date(year, month - 1, day);
 
@@ -294,22 +353,20 @@ class PersonInfo extends React.Component {
             }
         }
         else {
-            for (let i = 0; i < periods.length; i++) {
-                if(periods[i].type === "INCOME") {
-                    count += periods[i].amount;
+            for (let i = 0; i < transactions.length; i++) {
+                if(transactions[i].type === "INCOME") {
+                    count += transactions[i].amount;
                 }
             }
         }
 
-        console.log(periods[0].createdAt);
-        console.log(count);
         return count;
     }
-
-    async personExpenses(id) {
-        const result = await axios.get(`http://localhost:8080/api/v1/protected/transaction/${id}`);
-        const periods = result.data.profileTransactions;
+    
+    totalExpenses(transactions) {
+        
         let count = 0;
+
         const currentDate = new Date();
 
         const dateFromParts = this.state.dateFrom.split("-");
@@ -318,75 +375,55 @@ class PersonInfo extends React.Component {
         const dateToParts = this.state.dateTo.split("-");
         const dateTo = new Date(dateToParts[2], dateToParts[1] - 1, dateToParts[0]);
 
-        // currentDate like "1.1.1111"
         if (this.state.selectedPeriod === 1) {
-            for (let i = 0; i < periods.length; i++) {
-                const [year, month, day] = periods[i].createdAt;
-                if(periods[i].type === "OUTCOME" && parseInt(day) === currentDate.getDate() && parseInt(month) - 1 === currentDate.getMonth() && parseInt(year) === currentDate.getFullYear()) {
-                    count += periods[i].amount;
+            for (let i = 0; i < transactions.length; i++) {
+                const [year, month, day] = transactions[i].createdAt;
+                if(transactions[i].type === "OUTCOME" && parseInt(day) === currentDate.getDate() && parseInt(month) - 1 === currentDate.getMonth() && parseInt(year) === currentDate.getFullYear()) {
+                    count += transactions[i].amount;
                 }
             }
         }
         else if (this.state.selectedPeriod === 2) {
-            for (let i = 0; i < periods.length; i++) {
-                const [year, month] = periods[i].createdAt;
-                if(periods[i].type === "OUTCOME" && parseInt(month) - 1 === currentDate.getMonth() && parseInt(year) === currentDate.getFullYear()) {
-                    count += periods[i].amount;
+            for (let i = 0; i < transactions.length; i++) {
+                const [year, month] = transactions[i].createdAt;
+                if(transactions[i].type === "OUTCOME" && parseInt(month) - 1 === currentDate.getMonth() && parseInt(year) === currentDate.getFullYear()) {
+                    count += transactions[i].amount;
                 }
             }
         }
         else if (this.state.selectedPeriod === 3) {
-            for (let i = 0; i < periods.length; i++) {
-                const [year] = periods[i].createdAt;
-                if(periods[i].type === "OUTCOME" && parseInt(year) === currentDate.getFullYear()) {
-                    count += periods[i].amount;
+            for (let i = 0; i < transactions.length; i++) {
+                const [year] = transactions[i].createdAt;
+                if(transactions[i].type === "OUTCOME" && parseInt(year) === currentDate.getFullYear()) {
+                    count += transactions[i].amount;
                 }
             }
         }
         else if (this.state.selectedPeriod === 4) {
-            const elementsForPeriod = periods.filter((period) => {
+            const elementsForPeriod = transactions.filter((period) => {
                 const [year, month, day] = period.createdAt;
                 const periodDate = new Date(year, month - 1, day);
 
                 if (dateFrom > dateTo) {
-                    return ( periodDate <= dateFrom && periodDate >= dateTo);
+                    return (periodDate <= dateFrom && periodDate >= dateTo);
                 }
-                return (periodDate >= dateFrom && periodDate <= dateTo);
+                return ( periodDate >= dateFrom && periodDate <= dateTo);
             });
         
             for (let i = 0; i < elementsForPeriod.length; i++) {
                 if (elementsForPeriod[i].type === "OUTCOME") {
-                    count += parseFloat(elementsForPeriod[i].amount);
+                    count += elementsForPeriod[i].amount;
                 }
             }
         }
         else {
-            for (let i = 0; i < periods.length; i++) {
-                if(periods[i].type === "OUTCOME") {
-                    count += periods[i].amount;
+            for (let i = 0; i < transactions.length; i++) {
+                if(transactions[i].type === "OUTCOME") {
+                    count += transactions[i].amount;
                 }
             }
         }
 
-        console.log("Out " + count);
-        return count;
-    }
-
-    async totalProfits() {
-        let persons = this.props.persons;
-        let count = 0;
-        for (let i = 0; i < persons.length; i++) {
-            count += await this.personProfits(persons[i].id);
-        }
-        return count;
-    }
-    
-    async totalExpenses() {
-        let persons = this.props.persons;
-        let count = 0;
-        for (let i = 0; i < persons.length; i++) {
-            count += await this.personExpenses(persons[i].id);
-        }
         return count;
     }
 }

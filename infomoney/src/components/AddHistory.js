@@ -70,15 +70,13 @@ class AddHistory extends React.Component {
                         e.preventDefault();
                         let money = document.querySelector(".app-modal-history main input");
                         let date = `${document.querySelector(".app-modal-history .select-date").value}.${parseInt(document.querySelector(".app-modal-history .select-month").value) + 1}.${document.querySelector(".app-modal-history .select-year").value}`;
-                        console.log(date);
                         let disc = document.querySelector(".app-modal-history main textarea");
-                        let id = Date.now();
 
                         if (money.value !== "" && !isNaN(money.value)) {
                             if (disc.value === "") {
                                 disc.value = "-";
                             }
-                            this.props.addHistory(id, parseInt(money.value), date, disc.value);
+                            this.props.addHistory(parseInt(money.value), date, disc.value);
                             document.querySelector(".app-modal-history").classList.add("d-none");
                             money.placeholder = "Money";
                             money.classList.remove("red-placeholder");

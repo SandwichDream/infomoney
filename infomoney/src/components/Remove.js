@@ -11,7 +11,7 @@ class Remove extends React.Component {
                     <BiX className="bix" onClick={() => {document.querySelector(".app-modal-remove").classList.add("d-none")}}/>
                 </header>
                 <main>
-                    <p>Are you sure you want to remove "{this.props.selectPerson().nick}"?</p>
+                    <p>Are you sure you want to remove "{this.props.selectPerson().name}"?</p>
                 </main>
                 <footer className="d-flex justify-content-end">
                     <button className="btn" onClick={() => {

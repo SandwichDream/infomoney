@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import Period from "./Period";
 
 class PersonHistory extends React.Component {
@@ -20,9 +19,8 @@ class PersonHistory extends React.Component {
         }
     }
 
-    async selectedPeriods() {
-        const result = await axios.get(`http://localhost:8080/api/v1/protected/transaction/${this.props.person.id}`);
-        const periods = result.data.profileTransactions;
+    selectedPeriods() {
+        const transactions = this.props.transactions;
         const currentDate = new Date();
 
         const dateFromParts = this.props.dateFrom.split("-");
@@ -31,38 +29,37 @@ class PersonHistory extends React.Component {
         const dateToParts = this.props.dateTo.split("-");
         const dateTo = new Date(dateToParts[2], dateToParts[1] - 1, dateToParts[0]);
 
-        // currentDate like "1.1.1111"
         if (this.props.selectedPeriod === 1) {
-            return periods.filter((period) => {
-                const dateParts = period.date.split(".");
-                if (parseInt(dateParts[0]) === currentDate.getDate() && parseInt(dateParts[1]) - 1 === currentDate.getMonth() && parseInt(dateParts[2]) === currentDate.getFullYear()) {
+            return transactions.filter((transaction) => {
+                const [year, month, day] = transaction.createdAt;
+                if(parseInt(day) === currentDate.getDate() && parseInt(month) - 1 === currentDate.getMonth() && parseInt(year) === currentDate.getFullYear()) {
                     return true;
                 }
                 return false;
             })
         }
         else if (this.props.selectedPeriod === 2) {
-            return periods.filter((period) => {
-                const dateParts = period.date.split(".");
-                if (parseInt(dateParts[1]) - 1 === currentDate.getMonth() && parseInt(dateParts[2]) === currentDate.getFullYear()) {
+            return transactions.filter((transaction) => {
+                const [year, month] = transaction.createdAt
+                if (parseInt(month) - 1 === currentDate.getMonth() && parseInt(year) === currentDate.getFullYear()) {
                     return true;
                 }
                 return false;
             })
         }
         else if (this.props.selectedPeriod === 3) {
-            return periods.filter((period) => {
-                const dateParts = period.date.split(".");
-                if (parseInt(dateParts[2]) === currentDate.getFullYear()) {
+            return transactions.filter((transaction) => {
+                const [year] = transaction.createdAt
+                if (parseInt(year) === currentDate.getFullYear()) {
                     return true;
                 }
                 return false;
             })
         }
         else if (this.props.selectedPeriod === 4) {
-            return periods.filter((period) => {
-                const dateParts = period.date.split(".");
-                const date = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
+            return transactions.filter((transaction) => {
+                const [year, month, day] = transaction.createdAt;
+                const date = new Date(year, month - 1, day);
                 
                 if (dateFrom > dateTo) {
                     if (date <= dateFrom && date >= dateTo) {
@@ -76,7 +73,7 @@ class PersonHistory extends React.Component {
             })
         }
         else {
-            return periods;
+            return transactions;
         }
     }
 }

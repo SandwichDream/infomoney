@@ -8,6 +8,7 @@ import EditPerson from './components/EditPerson';
 import EditHistory from './components/EditHistory';
 import Remove from './components/Remove';
 import FirstPage from './components/FirstPage';
+import SameName from './components/SameName';
 
 import { BiPlus } from "react-icons/bi";
 import { BsBoxes } from "react-icons/bs";
@@ -19,14 +20,13 @@ class App extends React.Component {
 
     constructor(props) {
         super(props);
-
-        this.setInitialState();
-
         this.state = {
             persons: [],
             selectedPersonId: 0,
             selectedPeriodId: 0,
-            boxes: true
+            boxes: true,
+            updatesetInitialStatePI: false,
+            errorMessage: ""
         }
         this.removePerson = this.removePerson.bind(this);
         this.removeHistory = this.removeHistory.bind(this);
@@ -37,6 +37,8 @@ class App extends React.Component {
         this.selectPerson = this.selectPerson.bind(this);
         this.setIdSelector = this.setIdSelector.bind(this);
         this.setPeriodIdSelector = this.setPeriodIdSelector.bind(this);
+        this.setInitialState = this.setInitialState.bind(this);
+        this.setBoolUpdatePI = this.setBoolUpdatePI.bind(this);
     }
     
     render() {
@@ -58,13 +60,14 @@ class App extends React.Component {
                     }}><BiPlus className="icon-plus"/> Add Person</button>
 
                 </div>
-                <PersonInfo persons={this.state.persons} selectPerson={this.selectPerson} setIdSelector={this.setIdSelector} setPeriodIdSelector={this.setPeriodIdSelector} removeHistory={this.removeHistory}/>
+                <PersonInfo setBoolUpdatePI={this.setBoolUpdatePI} updatesetInitialState={this.state.updatesetInitialStatePI} setInitialStateApp={this.setInitialState} persons={this.state.persons} selectPerson={this.selectPerson} setIdSelector={this.setIdSelector} setPeriodIdSelector={this.setPeriodIdSelector} removeHistory={this.removeHistory}/>
 
                 <AddPerson addPerson={this.addPerson} edit={this.editPerson}/>
                 <AddHistory addHistory={this.addHistory}/>
                 <EditPerson editPerson={this.editPerson}/>
                 <EditHistory editHistory={this.editHistory}/>
                 <Remove selectPerson={this.selectPerson} remove={this.removePerson}/>
+                <SameName message={this.state.errorMessage}/>
             </div>
             
             <FirstPage/>
@@ -72,16 +75,17 @@ class App extends React.Component {
         </div>);
     }
 
-    async setInitialState() {
-        const result = await axios.get("http://localhost:8080/api/v1/protected/transaction");
-
-        this.setState({ persons: result.data.profiles });
-        console.log(this.state);
-    }
-
-    componentDidMount() {
+    async componentDidMount() {
         this.checkWindowWidth();
         window.addEventListener('resize', this.checkWindowWidth);
+        await this.setInitialState();
+    }
+
+    async setInitialState() {
+        const result = await axios.get("http://localhost:8080/api/v1/protected/transaction");
+        const persons = result.data.profiles;
+        this.setState({ persons });
+        return persons;
     }
     
     componentWillUnmount() {
@@ -99,50 +103,53 @@ class App extends React.Component {
     }
 
     async addPerson(nick) {
-        await axios.post("http://localhost:8080/api/v1/protected/profile", {name: nick});
-        this.setInitialState();
+        try {
+            await axios.post("http://localhost:8080/api/v1/protected/profile", { name: nick });
+            await this.setInitialState();
+        } catch (error) {
+            if (error.response) {
+                // Помилкова відповідь від сервера (наприклад, 400, 500)
+                console.error('Server Error:', error.response.data);
+                this.setState({ errorMessage: error.response.data });
+                document.querySelector(".app-same-name").classList.remove("d-none");
+            } else if (error.request) {
+                // Немає відповіді від сервера
+                console.error('No response from server:', error.request);
+            } else {
+                // Щось інше викликало помилку
+                console.error('Error:', error.message);
+            }
+        }
     }
 
     async editPerson(nick) {
         await axios.patch(`http://localhost:8080/api/v1/protected/profile/${this.state.selectedPersonId}`, {name: nick});
-        this.setInitialState();
+        await this.setInitialState();
     }
 
     async removePerson() {
         await axios.delete(`http://localhost:8080/api/v1/protected/profile/${this.state.selectedPersonId}`);
+        await this.setInitialState();
+    }
+
+    async addHistory(money, date, disc) {
+        await axios.post(`http://localhost:8080/api/v1/protected/transaction/${this.state.selectedPersonId}`, {
+            description: disc,
+            amount: money,
+            type: "INCOME",
+            createAt: date
+        });
         this.setInitialState();
     }
 
-    async addHistory(id, money, date, disc) {
-        const person = this.selectPerson();
-        const updatedPersons = this.state.persons.map(el => {
-            if (el.id === person.id) {
-                return {
-                    ...el,
-                    periods: [
-                        ...el.periods,
-                        {
-                            id: id,
-                            money: money,
-                            date: date,
-                            disc: disc
-                        }
-                    ]
-                };
-            }
-            return el;
-        });
-    
-        this.setState({
-            persons: updatedPersons,
-            selectedPersonId: this.state.selectedPersonId,
-            selectedPeriodId: this.state.selectedPeriodId
-        });
-        await axios.post(`http://localhost:8080/api/v1/protected/transaction/${person.id}`);
-        this.setInitialState();
-    }
-
-    editHistory(money, date, disc) {
+    async editHistory(money, date, disc) {
+        await axios.put(`http://localhost:8080/api/v1/protected/transaction/${this.state.selectedPersonId}/update/${this.state.selectedPeriodId}`, {
+            description: disc,
+            amount: money,
+            type: "INCOME",
+            createAt: date
+        })
+        
         const person = this.selectPerson();
         const updatedPersons = this.state.persons.map(el => {
             if (el.id === person.id) {
@@ -165,9 +172,7 @@ class App extends React.Component {
         })
 
         this.setState({
-            persons: updatedPersons,
-            selectedPersonId: this.state.selectedPersonId,
-            selectedPeriodId: this.state.selectedPeriodId
+            persons: updatedPersons
         });
     }
 
@@ -184,9 +189,7 @@ class App extends React.Component {
         });
 
         this.setState({
-            persons: updatedPersons,
-            selectedPersonId: this.state.selectedPersonId,
-            selectedPeriodId: this.state.selectedPeriodId
+            persons: updatedPersons
         })
     }
 
@@ -202,7 +205,8 @@ class App extends React.Component {
 
     setIdSelector(id) {
         this.setState({
-            selectedPersonId: id
+            selectedPersonId: id,
+            updatesetInitialStatePI: true
         })
     }
 
@@ -210,6 +214,12 @@ class App extends React.Component {
         this.setState({
             selectedPeriodId: id
         })
+    }
+
+    setBoolUpdatePI(bool) {
+        if (typeof bool === "boolean") {
+            this.setState({ updatesetInitialStatePI: bool });
+        }
     }
 }
 

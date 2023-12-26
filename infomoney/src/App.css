@@ -181,7 +181,8 @@ body {
 .app-modal-remove,
 .app-set-period,
 .app-modal-sign-up,
-.app-modal-log-in {
+.app-modal-log-in,
+.app-same-name {
     background-color: rgba(245, 245, 245, 0.25);
     position: absolute;
     top: 0;
@@ -196,7 +197,8 @@ body {
 .app-modal-remove>div,
 .app-set-period>div,
 .app-modal-sign-up>div,
-.app-modal-log-in>div {
+.app-modal-log-in>div,
+.app-same-name>div {
     color: #2E3346;
     width: 600px;
     height: fit-content;
@@ -220,7 +222,8 @@ body {
 .app-set-period footer button,
 .app-modal-sign-up footer button,
 .app-modal-log-in footer button,
-.skip {
+.skip,
+.app-same-name footer button {
     list-style: none;
     font-weight: 600;
     background: linear-gradient(263deg, #92CAC0 -2.21%, #9FBD86 95.62%);
@@ -236,7 +239,8 @@ body {
 .app-set-period footer button:hover,
 .app-modal-sign-up footer button:hover,
 .app-modal-log-in footer button:hover,
-.skip {
+.skip,
+.app-same-name footer button {
     color: white;
 }
 
@@ -248,7 +252,8 @@ body {
 .app-set-period>div h5,
 .app-set-period>div h6,
 .app-modal-sign-up>div h5,
-.app-modal-log-in>div h5 {
+.app-modal-log-in>div h5
+.app-same-name>div h5 {
     font-weight: 600;
     user-select: none;
 }
@@ -338,7 +343,7 @@ input[type="text"]{
     color: #92CAC0;
     font-size: 80px;
 }
-p{
+.first-page p{
     font-size: 44px;
     color: #F5F5F5;
 }
@@ -433,7 +438,10 @@ img{
     .app-modal-edit>div,
     .app-modal-history-edit>div,
     .app-modal-remove>div,
-    .app-set-period>div {
+    .app-set-period>div,
+    .app-modal-sign-up>div,
+    .app-modal-log-in>div,
+    .app-same-name>div {
         
         flex-direction: column;
         width: 400px;
