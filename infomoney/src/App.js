@@ -150,7 +150,7 @@ class App extends React.Component {
     }
 
     async removeHistory(id) {
-        await axios.delete(`http://localhost:8080/api/v1/protected/transaction/${this.state.selectedPersonId}/update/${id}`);
+        await axios.delete(`http://localhost:8080/api/v1/protected/transaction/${this.state.selectedPersonId}/delete/${id}`);
         this.setState({ updatesetInitialStatePI: true });
     }
 

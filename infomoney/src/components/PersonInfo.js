@@ -255,10 +255,6 @@ class PersonInfo extends React.Component {
             const personProfits = this.totalProfits(personTransactions);
             const personExpenses = this.totalExpenses(personTransactions);
 
-            console.log(personTransactions);
-            console.log(personProfits);
-            console.log(personExpenses);
-
             this.setState({ personTransactions, personProfits, personExpenses });
         }
     }
