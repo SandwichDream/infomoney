@@ -83,7 +83,10 @@ class AddHistory extends React.Component {
                     <button className="btn" onClick={(e) => {
                         e.preventDefault();
                         const money = document.querySelector(".app-modal-history main input[type='text']");
-                        const date = `${document.querySelector(".app-modal-history .select-date").value}.${parseInt(document.querySelector(".app-modal-history .select-month").value) + 1}.${document.querySelector(".app-modal-history .select-year").value}`;
+                        const day = (parseInt(document.querySelector(".app-modal-history .select-date").value)).toString().padStart(2, '0');
+                        const month = (parseInt(document.querySelector(".app-modal-history .select-month").value) + 1).toString().padStart(2, '0');
+                        const year = document.querySelector(".app-modal-history .select-year").value;
+                        const date = `${day}.${month}.${year}`;
                         const desc = document.querySelector(".app-modal-history main textarea");
 
                         const type = document.querySelectorAll(".app-modal-history main input[type='radio']")[0].checked ? "INCOME" : "OUTCOME";

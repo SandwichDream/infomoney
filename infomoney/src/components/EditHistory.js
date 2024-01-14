@@ -83,7 +83,10 @@ class EditHistory extends React.Component {
                     <button className="btn" onClick={(e) => {
                         e.preventDefault();
                         const money = document.querySelector(".app-modal-history-edit main input");
-                        const date = `${document.querySelector(".app-modal-history-edit .select-date").value}.${parseInt(document.querySelector(".app-modal-history-edit .select-month").value) + 1}.${document.querySelector(".app-modal-history-edit .select-year").value}`;
+                        const day = (parseInt(document.querySelector(".app-modal-history-edit .select-date").value)).toString().padStart(2, '0');
+                        const month = (parseInt(document.querySelector(".app-modal-history-edit .select-month").value) + 1).toString().padStart(2, '0');
+                        const year = document.querySelector(".app-modal-history-edit .select-year").value;
+                        const date = `${day}.${month}.${year}`;
                         const desc = document.querySelector(".app-modal-history-edit main textarea");
                         
                         const type = document.querySelectorAll(".app-modal-history-edit main input[type='radio']")[0].checked ? "INCOME" : "OUTCOME";
