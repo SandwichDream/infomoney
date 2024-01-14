@@ -32,28 +32,19 @@ class PersonHistory extends React.Component {
         if (this.props.selectedPeriod === 1) {
             return transactions.filter((transaction) => {
                 const [year, month, day] = transaction.createdAt;
-                if(parseInt(day) === currentDate.getDate() && parseInt(month) - 1 === currentDate.getMonth() && parseInt(year) === currentDate.getFullYear()) {
-                    return true;
-                }
-                return false;
+                return !!(parseInt(day) === currentDate.getDate() && parseInt(month) - 1 === currentDate.getMonth() && parseInt(year) === currentDate.getFullYear());
             })
         }
         else if (this.props.selectedPeriod === 2) {
             return transactions.filter((transaction) => {
                 const [year, month] = transaction.createdAt
-                if (parseInt(month) - 1 === currentDate.getMonth() && parseInt(year) === currentDate.getFullYear()) {
-                    return true;
-                }
-                return false;
+                return !!(parseInt(month) - 1 === currentDate.getMonth() && parseInt(year) === currentDate.getFullYear());
             })
         }
         else if (this.props.selectedPeriod === 3) {
             return transactions.filter((transaction) => {
                 const [year] = transaction.createdAt
-                if (parseInt(year) === currentDate.getFullYear()) {
-                    return true;
-                }
-                return false;
+                return parseInt(year) === currentDate.getFullYear();
             })
         }
         else if (this.props.selectedPeriod === 4) {

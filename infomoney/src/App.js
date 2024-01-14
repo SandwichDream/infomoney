@@ -16,6 +16,9 @@ import { BsBoxes } from "react-icons/bs";
 import "bootstrap/dist/css/bootstrap.min.css";
 import './App.css';
 
+const API_URL = "13.51.169.135";
+const LOCAL_URL = "localhost";
+
 class App extends React.Component {
 
     constructor(props) {
@@ -82,7 +85,7 @@ class App extends React.Component {
     }
 
     async setInitialState() {
-        const result = await axios.get("http://localhost:8080/api/v1/protected/transaction");
+        const result = await axios.get(`http://${API_URL}:8080/api/v1/protected/transaction`);
         const persons = result.data.profiles;
         this.setState({ persons });
         return persons;
@@ -104,7 +107,7 @@ class App extends React.Component {
 
     async addPerson(nick) {
         try {
-            await axios.post("http://localhost:8080/api/v1/protected/profile", { name: nick });
+            await axios.post(`http://${API_URL}:8080/api/v1/protected/profile`, { name: nick });
             await this.setInitialState();
         } catch (error) {
             if (error.response) {
@@ -120,17 +123,17 @@ class App extends React.Component {
     }
 
     async editPerson(nick) {
-        await axios.patch(`http://localhost:8080/api/v1/protected/profile/${this.state.selectedPersonId}`, {name: nick});
+        await axios.patch(`http://${API_URL}:8080/api/v1/protected/profile/${this.state.selectedPersonId}`, {name: nick});
         await this.setInitialState();
     }
 
     async removePerson() {
-        await axios.delete(`http://localhost:8080/api/v1/protected/profile/${this.state.selectedPersonId}`);
+        await axios.delete(`http://${API_URL}:8080/api/v1/protected/profile/${this.state.selectedPersonId}`);
         this.setState({ updatesetInitialStatePI: true });
     }
 
     async addHistory(money, type, date, desc) {
-        await axios.post(`http://localhost:8080/api/v1/protected/transaction/${this.state.selectedPersonId}`, {
+        await axios.post(`http://${API_URL}:8080/api/v1/protected/transaction/${this.state.selectedPersonId}`, {
             description: desc,
             amount: money,
             type,
@@ -140,7 +143,7 @@ class App extends React.Component {
     }
 
     async editHistory(money, type, date, desc) {
-        await axios.put(`http://localhost:8080/api/v1/protected/transaction/${this.state.selectedPersonId}/update/${this.state.selectedPeriodId}`, {
+        await axios.put(`http://${API_URL}:8080/api/v1/protected/transaction/${this.state.selectedPersonId}/update/${this.state.selectedPeriodId}`, {
             description: desc,
             amount: money,
             type,
@@ -150,7 +153,7 @@ class App extends React.Component {
     }
 
     async removeHistory(id) {
-        await axios.delete(`http://localhost:8080/api/v1/protected/transaction/${this.state.selectedPersonId}/delete/${id}`);
+        await axios.delete(`http://${API_URL}:8080/api/v1/protected/transaction/${this.state.selectedPersonId}/delete/${id}`);
         this.setState({ updatesetInitialStatePI: true });
     }
 

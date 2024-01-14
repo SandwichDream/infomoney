@@ -6,6 +6,9 @@ import SetPeriod from "./SetPeriod";
 import { BiPlus } from "react-icons/bi";
 import { BsFillXCircleFill, BsFillPencilFill, BsTrashFill } from "react-icons/bs";
 
+const API_URL = "13.51.169.135";
+const LOCAL_URL = "localhost";
+
 class PersonInfo extends React.Component {
     constructor(props) {
         super(props);
@@ -275,7 +278,7 @@ class PersonInfo extends React.Component {
 
     async personTransactions(person) {
         try {
-            const result = await axios.get(`http://localhost:8080/api/v1/protected/transaction/${person.id}`);
+            const result = await axios.get(`http://${API_URL}:8080/api/v1/protected/transaction/${person.id}`);
             return result.data.profileTransactions;
         } catch (error) {
             console.error(`Error fetching transactions for person with ID ${person.id}:`, error);
