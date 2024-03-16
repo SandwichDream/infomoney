@@ -16,7 +16,7 @@ import { BsBoxes } from "react-icons/bs";
 import "bootstrap/dist/css/bootstrap.min.css";
 import './App.css';
 
-const API_URL = "13.51.169.135";
+const API_URL = "set_before_build";
 const LOCAL_URL = "localhost";
 
 class App extends React.Component {

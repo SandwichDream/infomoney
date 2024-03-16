@@ -6,7 +6,7 @@ import SetPeriod from "./SetPeriod";
 import { BiPlus } from "react-icons/bi";
 import { BsFillXCircleFill, BsFillPencilFill, BsTrashFill } from "react-icons/bs";
 
-const API_URL = "13.51.169.135";
+const API_URL = "set_before_build";
 const LOCAL_URL = "localhost";
 
 class PersonInfo extends React.Component {
