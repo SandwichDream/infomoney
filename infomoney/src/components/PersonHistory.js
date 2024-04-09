@@ -2,70 +2,58 @@ import React from "react";
 import Period from "./Period";
 
 class PersonHistory extends React.Component {
-    render () {
-        const periods = this.selectedPeriods();
-
-        if (periods.length > 0) {
-            return (<ul className="scroll-0">
-                {periods.map((el) => (
-                    <Period key={el.id} period={el} setPeriodIdSelector={this.props.setPeriodIdSelector} remove={this.props.remove}/>
-                ))}
-            </ul>)
-        }
-        else {
-            return (<ul className="d-flex justify-content-center align-items-center scroll-0">
-                <h3>History is empty</h3>
-            </ul>)
-        }
+    constructor(props) {
+        super(props);
+        this.state = {
+            type: "INCOME"
+        };
     }
 
-    selectedPeriods() {
-        const transactions = this.props.transactions;
-        const currentDate = new Date();
+    handleTypeChange = (event) => {
+        this.setState({ type: event.target.value });
+    };
 
-        const dateFromParts = this.props.dateFrom.split("-");
-        const dateFrom = new Date(dateFromParts[2], dateFromParts[1] - 1, dateFromParts[0]);
+    render () {
+        const { transactions } = this.props;
+        const { type } = this.state;
 
-        const dateToParts = this.props.dateTo.split("-");
-        const dateTo = new Date(dateToParts[2], dateToParts[1] - 1, dateToParts[0]);
+        const periods = type === "INCOME" ? transactions.profits : transactions.expenses;
 
-        if (this.props.selectedPeriod === 1) {
-            return transactions.filter((transaction) => {
-                const [year, month, day] = transaction.createdAt;
-                return !!(parseInt(day) === currentDate.getDate() && parseInt(month) - 1 === currentDate.getMonth() && parseInt(year) === currentDate.getFullYear());
-            })
-        }
-        else if (this.props.selectedPeriod === 2) {
-            return transactions.filter((transaction) => {
-                const [year, month] = transaction.createdAt
-                return !!(parseInt(month) - 1 === currentDate.getMonth() && parseInt(year) === currentDate.getFullYear());
-            })
-        }
-        else if (this.props.selectedPeriod === 3) {
-            return transactions.filter((transaction) => {
-                const [year] = transaction.createdAt
-                return parseInt(year) === currentDate.getFullYear();
-            })
-        }
-        else if (this.props.selectedPeriod === 4) {
-            return transactions.filter((transaction) => {
-                const [year, month, day] = transaction.createdAt;
-                const date = new Date(year, month - 1, day);
-                
-                if (dateFrom > dateTo) {
-                    if (date <= dateFrom && date >= dateTo) {
-                        return true;
-                    }
-                }
-                else if (date >= dateFrom && date <= dateTo) {
-                    return true;
-                }
-                return false;
-            })
-        }
-        else {
-            return transactions;
-        }
+        return (
+            <div>
+                <div className="check-transaction-type">
+                    <label className="p-2">
+                        <input
+                            type="radio"
+                            value="INCOME"
+                            checked={type === "INCOME"}
+                            onChange={this.handleTypeChange}
+                        />
+                        Profits
+                    </label>
+                    <label className="p-2">
+                        <input
+                            type="radio"
+                            value="OUTCOME"
+                            checked={type === "OUTCOME"}
+                            onChange={this.handleTypeChange}
+                        />
+                        Expences
+                    </label>
+                </div>
+                {periods.length > 0 ? (
+                    <ul className="scroll-0">
+                        {periods.map((el) => (
+                            <Period key={el.id} period={el} setPeriodIdSelector={this.props.setPeriodIdSelector} remove={this.props.remove}/>
+                        ))}
+                    </ul>
+                ) : (
+                    <ul className="d-flex justify-content-center align-items-center scroll-0">
+                        <h3>History is empty</h3>
+                    </ul>
+                )}
+            </div>
+        );
     }
 }
 

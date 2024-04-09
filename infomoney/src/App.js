@@ -6,9 +6,13 @@ import AddPerson from './components/AddPerson';
 import AddHistory from './components/AddHistory';
 import EditPerson from './components/EditPerson';
 import EditHistory from './components/EditHistory';
-import Remove from './components/Remove';
+import RemovePerson from './components/RemovePerson';
 import FirstPage from './components/FirstPage';
 import SameName from './components/SameName';
+import AddWallet from './components/AddWallet';
+import EditWallet from './components/EditWallet';
+import AddCategory from './components/AddCategory';
+import EditCategory from './components/EditCategory';
 
 import { BiPlus } from "react-icons/bi";
 import { BsBoxes } from "react-icons/bs";
@@ -16,7 +20,7 @@ import { BsBoxes } from "react-icons/bs";
 import "bootstrap/dist/css/bootstrap.min.css";
 import './App.css';
 
-const API_URL = "13.51.169.135";
+const API_URL = "apiurl";
 const LOCAL_URL = "localhost";
 
 class App extends React.Component {
@@ -25,7 +29,11 @@ class App extends React.Component {
         super(props);
         this.state = {
             persons: [],
+            wallets: [],
+            categories: [],
             selectedPersonId: 0,
+            selectedWalletId: 0,
+            selectedCategoryId: 0,
             selectedPeriodId: 0,
             boxes: true,
             updatesetInitialStatePI: false,
@@ -38,10 +46,18 @@ class App extends React.Component {
         this.editHistory = this.editHistory.bind(this);
         this.addHistory = this.addHistory.bind(this);
         this.selectPerson = this.selectPerson.bind(this);
-        this.setIdSelector = this.setIdSelector.bind(this);
+        this.setPersonIdSelector = this.setPersonIdSelector.bind(this);
+        this.setWalletIdSelector = this.setWalletIdSelector.bind(this);
+        this.setCategoryIdSelector = this.setCategoryIdSelector.bind(this);
         this.setPeriodIdSelector = this.setPeriodIdSelector.bind(this);
         this.setInitialState = this.setInitialState.bind(this);
         this.setBoolUpdatePI = this.setBoolUpdatePI.bind(this);
+        this.addWallet = this.addWallet.bind(this);
+        this.editWallet = this.editWallet.bind(this);
+        this.removeWallet = this.removeWallet.bind(this);
+        this.addCategory = this.addCategory.bind(this);
+        this.removeCategory = this.removeCategory.bind(this);
+        this.editCategory = this.editCategory.bind(this);
     }
     
     render() {
@@ -57,20 +73,37 @@ class App extends React.Component {
 
                 <div className="persons-list">
 
-                    <Persons persons={this.state.persons} setIdSelector={this.setIdSelector} edit={this.editPerson}/>
+                    <Persons persons={this.state.persons} setIdSelector={this.setPersonIdSelector} edit={this.editPerson}/>
                     <button className="btn" onClick={() => {
                         document.querySelector(".app-modal").classList.remove("d-none");
                     }}><BiPlus className="icon-plus"/> Add Person</button>
 
                 </div>
-                <PersonInfo setBoolUpdatePI={this.setBoolUpdatePI} updatesetInitialState={this.state.updatesetInitialStatePI} setInitialStateApp={this.setInitialState} persons={this.state.persons} selectPerson={this.selectPerson} setIdSelector={this.setIdSelector} setPeriodIdSelector={this.setPeriodIdSelector} removeHistory={this.removeHistory}/>
+                <PersonInfo
+                    setBoolUpdatePI={this.setBoolUpdatePI}
+                    updatesetInitialState={this.state.updatesetInitialStatePI}
+                    setInitialStateApp={this.setInitialState}
+                    persons={this.state.persons}
+                    selectPerson={this.selectPerson}
+                    setIdSelector={this.setPersonIdSelector}
+                    setWalletIdSelector={this.setWalletIdSelector}
+                    setCategoryIdSelector={this.setCategoryIdSelector}
+                    setPeriodIdSelector={this.setPeriodIdSelector}
+                    removeWallet={this.removeWallet}
+                    removeCategory={this.removeCategory}
+                    removeHistory={this.removeHistory}
+                />
 
-                <AddPerson addPerson={this.addPerson} edit={this.editPerson}/>
-                <AddHistory addHistory={this.addHistory}/>
+                <AddPerson addPerson={this.addPerson}/>
+                <AddHistory addHistory={this.addHistory} wallets={this.state.wallets} categories={this.state.categories}/>
                 <EditPerson editPerson={this.editPerson}/>
-                <EditHistory editHistory={this.editHistory}/>
-                <Remove selectPerson={this.selectPerson} remove={this.removePerson}/>
+                <EditHistory editHistory={this.editHistory} wallets={this.state.wallets} categories={this.state.categories}/>
+                <RemovePerson selectPerson={this.selectPerson} remove={this.removePerson}/>
                 <SameName message={this.state.errorMessage}/>
+                <AddWallet addWallet={this.addWallet}/>
+                <EditWallet editWallet={this.editWallet}/>
+                <AddCategory addCategory={this.addCategory}/>
+                <EditCategory editCategory={this.editCategory}/>
             </div>
             
             <FirstPage/>
@@ -86,9 +119,11 @@ class App extends React.Component {
 
     async setInitialState() {
         const result = await axios.get(`http://${API_URL}:8080/api/v1/protected/transaction`);
-        const persons = result.data.profiles;
-        this.setState({ persons });
-        return persons;
+        const wallets = await axios.get(`http://${API_URL}:8080/api/v1/protected/wallet`);
+        const categories = await axios.get(`http://${API_URL}:8080/api/v1/protected/category`)
+        const info = { persons: result.data.profiles, wallets: wallets.data, categories: categories.data };
+        this.setState({ persons: info.persons, wallets: info.wallets, categories: info.categories });
+        return info;
     }
     
     componentWillUnmount() {
@@ -106,20 +141,8 @@ class App extends React.Component {
     }
 
     async addPerson(nick) {
-        try {
-            await axios.post(`http://${API_URL}:8080/api/v1/protected/profile`, { name: nick });
-            await this.setInitialState();
-        } catch (error) {
-            if (error.response) {
-                console.error('Server Error:', error.response.data);
-                this.setState({ errorMessage: error.response.data });
-                document.querySelector(".app-same-name").classList.remove("d-none");
-            } else if (error.request) {
-                console.error('No response from server:', error.request);
-            } else {
-                console.error('Error:', error.message);
-            }
-        }
+        await axios.post(`http://${API_URL}:8080/api/v1/protected/profile`, { name: nick });
+        await this.setInitialState();
     }
 
     async editPerson(nick) {
@@ -132,22 +155,56 @@ class App extends React.Component {
         this.setState({ updatesetInitialStatePI: true });
     }
 
-    async addHistory(money, type, date, desc) {
+    async addWallet(walletName) {
+        await axios.post(`http://${API_URL}:8080/api/v1/protected/wallet`, { profileId: this.state.selectedPersonId, name: walletName, description: "" });
+        this.setState({ updatesetInitialStatePI: true });
+    }
+
+    async editWallet(walletName) {
+        await axios.put(`http://${API_URL}:8080/api/v1/protected/wallet/${this.state.selectedWalletId}`, { profileId: this.state.selectedPersonId, name: walletName, description: "" });
+        this.setState({ updatesetInitialStatePI: true });
+    }
+
+    async removeWallet() {
+        await axios.delete(`http://${API_URL}:8080/api/v1/protected/wallet/${this.state.selectedWalletId}`);
+        this.setState({ updatesetInitialStatePI: true });
+    }
+
+    async addCategory(categoryName) {
+        await axios.post(`http://${API_URL}:8080/api/v1/protected/category`, { profileId: this.state.selectedPersonId, name: categoryName, description: "" });
+        this.setState({ updatesetInitialStatePI: true });
+    }
+
+    async editCategory(categoryName) {
+        await axios.put(`http://${API_URL}:8080/api/v1/protected/category/${this.state.selectedCategoryId}`, { profileId: this.state.selectedPersonId, name: categoryName, description: "" });
+        this.setState({ updatesetInitialStatePI: true });
+    }
+
+    async removeCategory() {
+        await axios.delete(`http://${API_URL}:8080/api/v1/protected/category/${this.state.selectedCategoryId}`);
+        this.setState({ updatesetInitialStatePI: true });
+    }
+
+    async addHistory(money, type, date, desc, walletId, categoryId) {
         await axios.post(`http://${API_URL}:8080/api/v1/protected/transaction/${this.state.selectedPersonId}`, {
             description: desc,
             amount: money,
             type,
-            createdAt: date
+            createdAt: date,
+            walletId,
+            categoryId
         });
         this.setState({ updatesetInitialStatePI: true });
     }
 
-    async editHistory(money, type, date, desc) {
+    async editHistory(money, type, date, desc, walletId, categoryId) {
         await axios.put(`http://${API_URL}:8080/api/v1/protected/transaction/${this.state.selectedPersonId}/update/${this.state.selectedPeriodId}`, {
             description: desc,
             amount: money,
             type,
-            createdAt: date
+            createdAt: date,
+            walletId,
+            categoryId
         });
         this.setState({ updatesetInitialStatePI: true });
     }
@@ -167,9 +224,23 @@ class App extends React.Component {
         return {id: 0, name: "InfoMoney"};
     }
 
-    setIdSelector(id) {
+    setPersonIdSelector(id) {
         this.setState({
             selectedPersonId: id,
+            updatesetInitialStatePI: true
+        })
+    }
+
+    setWalletIdSelector(id) {
+        this.setState({
+            selectedWalletId: id,
+            updatesetInitialStatePI: true
+        })
+    }
+
+    setCategoryIdSelector(id) {
+        this.setState({
+            selectedCategoryId: id,
             updatesetInitialStatePI: true
         })
     }

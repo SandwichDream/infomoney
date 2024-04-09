@@ -2,13 +2,13 @@ import React from "react";
 
 import { BiX } from "react-icons/bi";
 
-class Remove extends React.Component {
+class RemovePerson extends React.Component {
     render() {
-        return(<div className="app-modal-remove modal-fullscreen d-none">
+        return(<div className="app-modal remove-person modal-fullscreen d-none">
             <div>
                 <header className="d-flex justify-content-between mb-4">
                     <h5>Warning</h5>
-                    <BiX className="bix" onClick={() => {document.querySelector(".app-modal-remove").classList.add("d-none")}}/>
+                    <BiX className="bix" onClick={() => {document.querySelector(".remove-person").classList.add("d-none")}}/>
                 </header>
                 <main>
                     <p>Are you sure you want to remove "{this.props.selectPerson().name}"?</p>
@@ -16,7 +16,7 @@ class Remove extends React.Component {
                 <footer className="d-flex justify-content-end">
                     <button className="btn" onClick={() => {
                         this.props.remove();
-                        document.querySelector(".app-modal-remove").classList.add("d-none");
+                        document.querySelector(".remove-person").classList.add("d-none");
                     }}>Remove</button>
                 </footer>
             </div>
@@ -24,4 +24,4 @@ class Remove extends React.Component {
     }
 }
 
-export default Remove;
+export default RemovePerson;

@@ -4,7 +4,7 @@ import { BiX } from "react-icons/bi";
 
 class AddPerson extends React.Component {
     render() {
-        return (<div className="app-modal modal-fullscreen d-none">
+        return (<div className="app-modal add-person modal-fullscreen d-none">
             <div>
                 <header className="d-flex justify-content-between mb-4">
                     <h5>Add person</h5>

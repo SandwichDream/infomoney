@@ -5,8 +5,9 @@ import SetPeriod from "./SetPeriod";
 
 import { BiPlus } from "react-icons/bi";
 import { BsFillXCircleFill, BsFillPencilFill, BsTrashFill } from "react-icons/bs";
+import { MdAddCircleOutline, MdCreate, MdRemoveCircleOutline } from "react-icons/md";
 
-const API_URL = "13.51.169.135";
+const API_URL = "apiurl";
 const LOCAL_URL = "localhost";
 
 class PersonInfo extends React.Component {
@@ -29,7 +30,14 @@ class PersonInfo extends React.Component {
             totalExpenses: 0,
             personProfits: 0,
             personExpenses: 0,
+            doComponentDidMount: true,
+            walletValue: 0,
+            categoryValue: 0,
+            wallets: [],
+            categories: [],
             allTransactions: [],
+            transactions: { profits: [], expenses: [] },
+            expenseTransactions: [],
             personTransactions: []
         }
         this.setDateFrom = this.setDateFrom.bind(this);
@@ -91,7 +99,7 @@ class PersonInfo extends React.Component {
                     }}>all</li>
                 </ul>
                 <button className="btn" onClick={() => {
-                    document.querySelector(".app-set-period").classList.remove("d-none");
+                    document.querySelector(".set-period").classList.remove("d-none");
                 }}>
                     <h6>{this.state.dateFrom}</h6>
                     <h6 className="m-0">{this.state.dateTo}</h6>
@@ -101,10 +109,10 @@ class PersonInfo extends React.Component {
                     <h4>Total:</h4>
                     <div className="container info-money">
                         <div className="row row-cols-2">
-                            <div className="col app-border-bottom app-border-right">number of profits:</div>
+                            <div className="col app-border-bottom app-border-right">income:</div>
                             <div className="col text-success app-border-bottom">{this.state.totalProfits}</div>
 
-                            <div className="col app-border-bottom app-border-right">number of losses:</div>
+                            <div className="col app-border-bottom app-border-right">expences:</div>
                             <div className="col text-danger app-border-bottom">{this.state.totalExpenses}</div>
 
                             <div className="col app-border-right">total:</div>
@@ -164,7 +172,7 @@ class PersonInfo extends React.Component {
                     }}>all</li>
                 </ul>
                 <button className="btn" onClick={() => {
-                    document.querySelector(".app-set-period").classList.remove("d-none");
+                    document.querySelector(".set-period").classList.remove("d-none");
                 }}>
                     <h6>{this.state.dateFrom}</h6>
                     <h6 className="m-0">{this.state.dateTo}</h6>
@@ -174,10 +182,10 @@ class PersonInfo extends React.Component {
                 <h4>Total:</h4>
                 <div className="container info-money">
                     <div className="row row-cols-2">
-                        <div className="col app-border-bottom app-border-right">number of profits:</div>
+                        <div className="col app-border-bottom app-border-right">income:</div>
                         <div className="col text-success app-border-bottom">{this.state.totalProfits}</div>
 
-                        <div className="col app-border-bottom app-border-right">number of losses:</div>
+                        <div className="col app-border-bottom app-border-right">expences:</div>
                         <div className="col text-danger app-border-bottom">{this.state.totalExpenses}</div>
 
                         <div className="col app-border-right">total:</div>
@@ -188,10 +196,10 @@ class PersonInfo extends React.Component {
                     <h4>{person.name}'s info:</h4>
                     <div className="d-flex justify-content-evenly m-2 controls-btns-person">
                         <BsFillPencilFill className="icon" onClick={() => {
-                            document.querySelector(".app-modal-edit main input").value = person.name;
-                            document.querySelector(".app-modal-edit").classList.remove("d-none");
+                            document.querySelector(".edit-person main input").value = person.name;
+                            document.querySelector(".edit-person").classList.remove("d-none");
                         }}/>
-                        <BsTrashFill className="icon" onClick={() => document.querySelector(".app-modal-remove").classList.remove("d-none")}/>
+                        <BsTrashFill className="icon" onClick={() => document.querySelector(".remove-person").classList.remove("d-none")}/>
                         <BsFillXCircleFill className="icon" onClick={() => {
                             this.props.setIdSelector(0);
                             
@@ -202,12 +210,74 @@ class PersonInfo extends React.Component {
                         }}/>
                     </div>
                 </div>
+                <div className="d-flex align-items-center mb-2">
+                    wallet:
+                    <select className="form-select select-wallet" defaultValue={0} onChange={(el) => {
+                            this.setState({walletValue: el.target.value});
+                            this.props.setWalletIdSelector(el.target.value);
+                        }}>
+                        <option value="0">All wallets</option>
+                        {(() => {
+                            const wallets = this.state.wallets;
+                            const options = [];
+
+                            for (let i = 0; i < wallets.length; i++) {
+                                options.push(<option key={wallets[i].id} value={wallets[i].id}>{wallets[i].name}</option>);
+                            }
+
+                            return options;
+                        })()}
+                    </select>
+                    <MdAddCircleOutline className="MdIcon" onClick={() => document.querySelector(".add-wallet").classList.remove("d-none")}/>
+                    <MdRemoveCircleOutline className="MdIcon" onClick={() => {
+                        if (this.state.walletValue !== 0) {
+                            this.props.removeWallet();
+                            this.setState({ walletValue: 0 });
+                        }
+                    }}/>
+                    <MdCreate className="MdIcon" onClick={() => {
+                        if (this.state.walletValue !== 0) {
+                            document.querySelector(".edit-wallet").classList.remove("d-none");
+                        }
+                    }}/>
+                </div>
+                <div className="d-flex align-items-center mb-2">
+                    category:
+                    <select className="form-select select-wallet" defaultValue={0} onChange={(el) => {
+                        this.setState({categoryValue: el.target.value});
+                        this.props.setCategoryIdSelector(el.target.value);
+                    }}>
+                        <option value="0">All categories</option>
+                        {(() => {
+                            const categories = this.state.categories;
+                            const options = [];
+
+                            for (let i = 0; i < categories.length; i++) {
+                                options.push(<option key={categories[i].id} value={categories[i].id}>{categories[i].name}</option>)
+                            }
+
+                            return options;
+                        })()}
+                    </select>
+                    <MdAddCircleOutline className="MdIcon" onClick={() => document.querySelector(".add-category").classList.remove("d-none")}/>
+                    <MdRemoveCircleOutline className="MdIcon" onClick={() => {
+                        if (this.state.categoryValue !== 0) {
+                            this.props.removeCategory();
+                            this.setState({ categoryValue: 0 });
+                        }
+                    }}/>
+                    <MdCreate className="MdIcon" onClick={() => {
+                        if (this.state.categoryValue !== 0) {
+                            document.querySelector(".edit-category").classList.remove("d-none");
+                        }
+                    }}/>
+                </div>
                 <div className="container info-money">
                     <div className="row row-cols-2">
-                        <div className="col app-border-bottom app-border-right">number of profits:</div>
+                        <div className="col app-border-bottom app-border-right">income:</div>
                         <div className="col text-success app-border-bottom">{this.state.personProfits}</div>
 
-                        <div className="col app-border-bottom app-border-right">number of losses:</div>
+                        <div className="col app-border-bottom app-border-right">expences:</div>
                         <div className="col text-danger app-border-bottom">{this.state.personExpenses}</div>
 
                         <div className="col app-border-right">total:</div>
@@ -216,14 +286,14 @@ class PersonInfo extends React.Component {
                 </div>
                 <div className="periods">
                     <header>
-                        <h3>History</h3>
+                        <h3>Transactions</h3>
                     </header>
                     <main>
-                        <PersonHistory person={person} transactions={this.state.personTransactions} selectedPeriod={this.state.selectedPeriod} dateFrom={this.state.dateFrom} dateTo={this.state.dateTo} setPeriodIdSelector={this.props.setPeriodIdSelector} remove={this.props.removeHistory}/>
+                        <PersonHistory person={person} transactions={this.state.transactions} selectedPeriod={this.state.selectedPeriod} dateFrom={this.state.dateFrom} dateTo={this.state.dateTo} setPeriodIdSelector={this.props.setPeriodIdSelector} remove={this.props.removeHistory}/>
                     </main>
                     <footer className="d-flex">
                         <button className="btn m-1" onClick={() => {
-                            document.querySelector(".app-modal-history").classList.remove("d-none");
+                            document.querySelector(".add-history").classList.remove("d-none");
                         }}><BiPlus className="icon-plus"/> Add History</button>
                     </footer>
                 </div>
@@ -233,7 +303,10 @@ class PersonInfo extends React.Component {
     }
 
     async componentDidMount() {
-        await this.setInitialState();
+        if (this.state.doComponentDidMount) {
+            await this.setInitialState();
+            this.setState({ doComponentDidMount: false });
+        }
     }
 
     async componentDidUpdate() {
@@ -244,21 +317,24 @@ class PersonInfo extends React.Component {
     }
 
     async setInitialState() {
-        const result = await this.props.setInitialStateApp();
+        const info = await this.props.setInitialStateApp();
         const person = this.props.selectPerson();
 
-        const allTransactions = await this.allTransactions(result);
-        const totalProfits = this.totalProfits(allTransactions);
-        const totalExpenses = this.totalExpenses(allTransactions);
+        const allTransactions = await this.allTransactions(info.persons);
+        const transactionInfo = this.totalTransactions(allTransactions);
 
-        this.setState({ totalProfits, totalExpenses, allTransactions });
+        this.setState({ totalProfits: transactionInfo.profitsAmount, totalExpenses: transactionInfo.expensesAmount, allTransactions, wallets: info.wallets, });
 
         if (person.id > 0) {
             const personTransactions = await this.personTransactions(person);
-            const personProfits = this.totalProfits(personTransactions);
-            const personExpenses = this.totalExpenses(personTransactions);
+            const transactions = this.totalTransactions(personTransactions);
 
-            this.setState({ personTransactions, personProfits, personExpenses });
+            this.setState({
+                personProfits: transactions.profitsAmount,
+                personExpenses: transactions.expensesAmount,
+                transactions: { profits: transactions.profitsTransactions, expenses: transactions.expensesTransactions },
+                categories: info.categories
+            });
         }
     }
 
@@ -298,132 +374,59 @@ class PersonInfo extends React.Component {
         }
     }
 
-    totalProfits(transactions) {
-
-        let count = 0;
-
+    totalTransactions(transactions) {
         const currentDate = new Date();
+        const { dateFrom, dateTo, selectedPeriod } = this.state;
 
-        const dateFromParts = this.state.dateFrom.split("-");
-        const dateFrom = new Date(dateFromParts[2], dateFromParts[1] - 1, dateFromParts[0]);
-
-        const dateToParts = this.state.dateTo.split("-");
-        const dateTo = new Date(dateToParts[2], dateToParts[1] - 1, dateToParts[0]);
-
-        if (this.state.selectedPeriod === 1) {
-            for (let i = 0; i < transactions.length; i++) {
-                const [year, month, day] = transactions[i].createdAt;
-                if(transactions[i].type === "INCOME" && parseInt(day) === currentDate.getDate() && parseInt(month) - 1 === currentDate.getMonth() && parseInt(year) === currentDate.getFullYear()) {
-                    count += transactions[i].amount;
-                }
-            }
-        }
-        else if (this.state.selectedPeriod === 2) {
-            for (let i = 0; i < transactions.length; i++) {
-                const [year, month] = transactions[i].createdAt;
-                if(transactions[i].type === "INCOME" && parseInt(month) - 1 === currentDate.getMonth() && parseInt(year) === currentDate.getFullYear()) {
-                    count += transactions[i].amount;
-                }
-            }
-        }
-        else if (this.state.selectedPeriod === 3) {
-            for (let i = 0; i < transactions.length; i++) {
-                const [year] = transactions[i].createdAt;
-                if(transactions[i].type === "INCOME" && parseInt(year) === currentDate.getFullYear()) {
-                    count += transactions[i].amount;
-                }
-            }
-        }
-        else if (this.state.selectedPeriod === 4) {
-            const elementsForPeriod = transactions.filter((period) => {
-                const [year, month, day] = period.createdAt;
-                const periodDate = new Date(year, month - 1, day);
-
-                if (dateFrom > dateTo) {
-                    return (periodDate <= dateFrom && periodDate >= dateTo);
-                }
-                return ( periodDate >= dateFrom && periodDate <= dateTo);
-            });
-        
-            for (let i = 0; i < elementsForPeriod.length; i++) {
-                if (elementsForPeriod[i].type === "INCOME") {
-                    count += elementsForPeriod[i].amount;
-                }
-            }
-        }
-        else {
-            for (let i = 0; i < transactions.length; i++) {
-                if(transactions[i].type === "INCOME") {
-                    count += transactions[i].amount;
-                }
-            }
-        }
-
-        return count;
-    }
+        let info = {
+            profitsAmount: 0,
+            expensesAmount: 0,
+            profitsTransactions: [],
+            expensesTransactions: []
+        };
     
-    totalExpenses(transactions) {
-        
-        let count = 0;
-
-        const currentDate = new Date();
-
-        const dateFromParts = this.state.dateFrom.split("-");
-        const dateFrom = new Date(dateFromParts[2], dateFromParts[1] - 1, dateFromParts[0]);
-
-        const dateToParts = this.state.dateTo.split("-");
-        const dateTo = new Date(dateToParts[2], dateToParts[1] - 1, dateToParts[0]);
-
-        if (this.state.selectedPeriod === 1) {
-            for (let i = 0; i < transactions.length; i++) {
-                const [year, month, day] = transactions[i].createdAt;
-                if(transactions[i].type === "OUTCOME" && parseInt(day) === currentDate.getDate() && parseInt(month) - 1 === currentDate.getMonth() && parseInt(year) === currentDate.getFullYear()) {
-                    count += transactions[i].amount;
-                }
+        const filterByPeriod = (transaction) => {
+            if (selectedPeriod === 1) {
+                return transaction.createdAt[2] === currentDate.getDate() &&
+                       transaction.createdAt[1] === currentDate.getMonth() + 1 &&
+                       transaction.createdAt[0] === currentDate.getFullYear();
+            } else if (selectedPeriod === 2) {
+                return transaction.createdAt[1] === currentDate.getMonth() + 1 &&
+                       transaction.createdAt[0] === currentDate.getFullYear();
+            } else if (selectedPeriod === 3) {
+                return transaction.createdAt[0] === currentDate.getFullYear();
+            } else if (selectedPeriod === 4) {
+                const periodDate = new Date(transaction.createdAt[0], transaction.createdAt[1] - 1, transaction.createdAt[2]);
+                const fromDate = new Date(dateFrom.split("-").reverse().join("-"));
+                const toDate = new Date(dateTo.split("-").reverse().join("-"));
+                return periodDate >= fromDate && periodDate <= toDate;
             }
-        }
-        else if (this.state.selectedPeriod === 2) {
-            for (let i = 0; i < transactions.length; i++) {
-                const [year, month] = transactions[i].createdAt;
-                if(transactions[i].type === "OUTCOME" && parseInt(month) - 1 === currentDate.getMonth() && parseInt(year) === currentDate.getFullYear()) {
-                    count += transactions[i].amount;
-                }
-            }
-        }
-        else if (this.state.selectedPeriod === 3) {
-            for (let i = 0; i < transactions.length; i++) {
-                const [year] = transactions[i].createdAt;
-                if(transactions[i].type === "OUTCOME" && parseInt(year) === currentDate.getFullYear()) {
-                    count += transactions[i].amount;
-                }
-            }
-        }
-        else if (this.state.selectedPeriod === 4) {
-            const elementsForPeriod = transactions.filter((period) => {
-                const [year, month, day] = period.createdAt;
-                const periodDate = new Date(year, month - 1, day);
+            return true;
+        };
 
-                if (dateFrom > dateTo) {
-                    return (periodDate <= dateFrom && periodDate >= dateTo);
-                }
-                return ( periodDate >= dateFrom && periodDate <= dateTo);
-            });
-        
-            for (let i = 0; i < elementsForPeriod.length; i++) {
-                if (elementsForPeriod[i].type === "OUTCOME") {
-                    count += elementsForPeriod[i].amount;
-                }
-            }
-        }
-        else {
-            for (let i = 0; i < transactions.length; i++) {
-                if(transactions[i].type === "OUTCOME") {
-                    count += transactions[i].amount;
-                }
-            }
-        }
+        const filterByWallet = (transaction) => {
+            return parseInt(this.state.walletValue) !== 0 ? transaction.walletName === this.state.wallets.find((wallet) => wallet.id === parseInt(this.state.walletValue)).name : true;
+        };
 
-        return count;
+        const filterByCategory = (transaction) => {
+            return parseInt(this.state.categoryValue) !== 0 ? transaction.categoryName === this.state.categories.find((category) => category.id === parseInt(this.state.categoryValue)).name : true;
+        };
+
+        transactions.map((transaction) => {
+            if (filterByPeriod(transaction) && filterByWallet(transaction) && filterByCategory(transaction)) {
+                if (transaction.type === "INCOME") {
+                    info.profitsAmount += transaction.amount;
+                    info.profitsTransactions.push(transaction);
+                } else {
+                    info.expensesAmount += transaction.amount;
+                    info.expensesTransactions.push(transaction);
+                }
+                
+                return true;
+            }
+        })
+
+        return info;
     }
 }
 

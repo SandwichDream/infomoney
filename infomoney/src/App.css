@@ -6,14 +6,20 @@ body {
     padding-top: 50px;
 }
 
+:root {
+    --green: #92CAC0;
+    --white: #F5F5F5;
+    --dark_grey: #2E3346;
+}
+
 .persons-list {
-    color: #F5F5F5;
+    color: var(--white);
     width: 400px;
     height: 850px;
     padding: 50px;
     padding-top: 0;
     background-color: rgb(46, 51, 71, 50%);
-    border: 1px solid #92CAC0;
+    border: 1px solid var(--green);
     border-radius: 20px;
     
 }
@@ -31,12 +37,12 @@ body {
 
 .person {
     list-style: none;
-    border: 1px solid #92CAC0;
+    border: 1px solid var(--green);
     margin: 30px 0;
     border-radius: 20px;
     word-wrap: break-word;
     padding: 20px 10px 10px 30px;
-    background-color: #2E3346;
+    background-color: var(--dark_grey);
     opacity: 0.8;
     transition: opacity 200ms ease, background-color 200ms ease, color 200ms ease;
 }
@@ -48,26 +54,26 @@ body {
 }
 
 .chosen {
-    background-color: #92CAC0;
-    color: #2E3346;
+    background-color: var(--green);
+    color: var(--dark_grey);
 }
 
 .person-info {
-    color: #F5F5F5;
+    color: var(--white);
     width: 60%;
     height: 850px;
     padding: 50px;
     background-color: rgb(46, 51, 71, 25%);
-    border: 1px solid #92CAC0;
+    border: 1px solid var(--green);
     overflow: scroll;
     border-radius: 20px;
 }
 
 .person-info>header ul {
-    background: #2E3346;
+    background: var(--dark_grey);
     list-style: none;
     padding: 0;
-    border: 1px solid #92CAC0;
+    border: 1px solid var(--green);
     border-radius: 20px;
     overflow: hidden;
 }
@@ -83,7 +89,7 @@ body {
 .person-info>header button {
     list-style: none;
     font-weight: 600;
-    background: linear-gradient(263deg, #92CAC0 -2.21%, #9FBD86 95.62%);
+    background: linear-gradient(263deg, var(--green) -2.21%, #9FBD86 95.62%);
     padding: 10px 15px;
     border-radius: 20px;
     margin-bottom: 15px;
@@ -104,7 +110,7 @@ body {
 
 
 .info-money {
-    border: 1px solid #92CAC0;
+    border: 1px solid var(--green);
     border-radius: 20px;
     margin-bottom: 30px;
     overflow: hidden;
@@ -113,12 +119,17 @@ body {
     padding: 10px 30px;
 }
 
+.select-wallet {
+   margin-left: 10px;
+   width: 30%;
+}
+
 .periods {
-    height: 450px;
+    height: 500px;
     padding: 50px;
     padding-top: 10px;
     background-color: rgb(46, 51, 71, 50%);
-    border: 1px solid #92CAC0;
+    border: 1px solid var(--green);
     border-radius: 20px;
     margin-top: 30px;
 }
@@ -134,7 +145,7 @@ body {
 .periods button {
     list-style: none;
     font-weight: 600;
-    background: linear-gradient(263deg, #92CAC0 -2.21%, #9FBD86 95.62%);
+    background: linear-gradient(263deg, var(--green) -2.21%, #9FBD86 95.62%);
     margin-bottom: 30px;
     padding: 20px 30px;
     width: 100%;
@@ -144,7 +155,7 @@ body {
 .period {
     list-style: none;
     background-color: rgb(46, 51, 71, 50%);
-    border: 1px solid #92CAC0;
+    border: 1px solid var(--green);
     word-wrap: break-word;
 }
 
@@ -156,8 +167,16 @@ body {
     width: 100px;
 }
 
+.wallet {
+    width: 15%
+}
+
+.category {
+    width: 15%
+}
+
 .desc {
-    width: 60%;
+    width: 30%;
 }
 
 .controls-btns {
@@ -167,22 +186,14 @@ body {
 .persons-list button {
     list-style: none;
     font-weight: 600;
-    background: linear-gradient(263deg, #92CAC0 -2.21%, #9FBD86 95.62%);
+    background: linear-gradient(263deg, var(--green) -2.21%, #9FBD86 95.62%);
     margin-bottom: 30px;
     padding: 20px 30px;
     width: 100%;
     border-radius: 20px;
 }
 
-.app-modal,
-.app-modal-history,
-.app-modal-edit,
-.app-modal-history-edit,
-.app-modal-remove,
-.app-set-period,
-.app-modal-sign-up,
-.app-modal-log-in,
-.app-same-name {
+.app-modal {
     background-color: rgba(245, 245, 245, 0.25);
     position: absolute;
     top: 0;
@@ -190,16 +201,8 @@ body {
     backdrop-filter: blur(2.5px);
     z-index: 1;
 }
-.app-modal>div,
-.app-modal-history>div,
-.app-modal-edit>div,
-.app-modal-history-edit>div,
-.app-modal-remove>div,
-.app-set-period>div,
-.app-modal-sign-up>div,
-.app-modal-log-in>div,
-.app-same-name>div {
-    color: #2E3346;
+.app-modal>div {
+    color: var(--dark_grey);
     width: 600px;
     height: fit-content;
     position: absolute;
@@ -207,7 +210,7 @@ body {
     top: 40%;
     transform: translate(-50%, -50%);
     border-radius: 35px;
-    border: 2px solid #92CAC0;
+    border: 2px solid var(--green);
     background: rgba(245, 245, 245, 0.25);
     backdrop-filter: blur(15px);
     z-index: 2;
@@ -215,45 +218,20 @@ body {
 }
 
 .app-modal footer button,
-.app-modal-history footer button,
-.app-modal-edit footer button,
-.app-modal-history-edit footer button,
-.app-modal-remove footer button,
-.app-set-period footer button,
-.app-modal-sign-up footer button,
-.app-modal-log-in footer button,
-.skip,
-.app-same-name footer button {
+.skip {
     list-style: none;
     font-weight: 600;
-    background: linear-gradient(263deg, #92CAC0 -2.21%, #9FBD86 95.62%);
+    background: linear-gradient(263deg, var(--green) -2.21%, #9FBD86 95.62%);
     padding: 10px 15px;
     width: 90px;
     border-radius: 20px;
 }
 .app-modal footer button:hover,
-.app-modal-history footer button:hover,
-.app-modal-edit footer button:hover,
-.app-modal-history-edit footer button:hover,
-.app-modal-remove footer button:hover,
-.app-set-period footer button:hover,
-.app-modal-sign-up footer button:hover,
-.app-modal-log-in footer button:hover,
-.skip,
-.app-same-name footer button {
+.skip {
     color: white;
 }
 
-.app-modal>div h5,
-.app-modal-edit>div h5,
-.app-modal-history>div h5,
-.app-modal-history-edit>div h5,
-.app-modal-remove>div h5,
-.app-set-period>div h5,
-.app-set-period>div h6,
-.app-modal-sign-up>div h5,
-.app-modal-log-in>div h5
-.app-same-name>div h5 {
+.app-modal>div h5 {
     font-weight: 600;
     user-select: none;
 }
@@ -282,6 +260,15 @@ body {
     opacity: 0.8;
 }
 
+.MdIcon {
+    margin-left: 10px;
+    scale: 1.5;
+    transition: color 200ms ease;
+}
+.MdIcon:hover {
+    color: var(--green)
+}
+
 .icon {
     transition: opacity 200ms ease;
 }
@@ -298,11 +285,11 @@ body {
 }
 
 .app-border-bottom {
-    border-bottom: 1px solid #92CAC0;
+    border-bottom: 1px solid var(--green);
 }
 
 .app-border-right {
-    border-right: 1px solid #92CAC0;
+    border-right: 1px solid var(--green);
 }
 
 /* ==================== */
@@ -327,7 +314,7 @@ body {
     top: 40%;
     transform: translate(-50%, -50%);
     border-radius: 35px;
-    border: 2px solid #92CAC0;
+    border: 2px solid var(--green);
     background: rgba(245, 245, 245, 0.25);
     backdrop-filter: blur(15px);
     z-index: 2;
@@ -340,23 +327,23 @@ input[type="text"]{
 }
 
 .infomoney-title{
-    color: #92CAC0;
+    color: var(--green);
     font-size: 80px;
 }
 .first-page p{
     font-size: 44px;
-    color: #F5F5F5;
+    color: var(--white);
 }
 
 .btn-sign{
     font-size: 36px;
-    color: #F5F5F5;
+    color: var(--white);
     padding: 20px 60px;
     border: none;
     outline: none;
     position: relative;
     border-radius: 20px;
-    background: linear-gradient(to bottom, #D0E6F0, #50C49D, #92CAC0, #93D5E100);
+    background: linear-gradient(to bottom, #D0E6F0, #50C49D, var(--green), #93D5E100);
     cursor: pointer;
     z-index: 1;
 }
@@ -383,7 +370,7 @@ input[type="text"]{
     margin-left: 20px;
     padding: 20px 60px;
     border-radius: 20px;
-    background: #92CAC0;
+    background: var(--green);
     color: #323E42;
 }
 .btn-log:hover{
@@ -394,7 +381,7 @@ input[type="text"]{
     width: 125px;
     height: 60px;
     border-radius: 35px;
-    background: linear-gradient(247deg, #92CAC0 13.95%, #9FBD86 84.09%, #9FBD86 84.09%);
+    background: linear-gradient(247deg, var(--green) 13.95%, #9FBD86 84.09%, #9FBD86 84.09%);
 }
 
 .btn-cross{
@@ -433,16 +420,7 @@ img{
     .periods, .person-info {
         padding: 20px;
     }
-    .app-modal>div,
-    .app-modal-history>div,
-    .app-modal-edit>div,
-    .app-modal-history-edit>div,
-    .app-modal-remove>div,
-    .app-set-period>div,
-    .app-modal-sign-up>div,
-    .app-modal-log-in>div,
-    .app-same-name>div {
-        
+    .app-modal>div {
         flex-direction: column;
         width: 400px;
     }

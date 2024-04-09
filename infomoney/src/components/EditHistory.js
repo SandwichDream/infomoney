@@ -6,23 +6,26 @@ class EditHistory extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            month: 0
+            month: 0,
+            walletId: null,
+            categoryId: null
         }
     }
 
     render() {
         const currentDate = new Date();
 
-        return(<form className="app-modal-history-edit modal-fullscreen d-none" ref={(e) => this.editHistoryForm = e}>
+        return(<form className="app-modal edit-history modal-fullscreen d-none" ref={(e) => this.editHistoryForm = e}>
             <div>
                 <header className="d-flex justify-content-between mb-4">
                     <h5 className="user-select-none">Edit History</h5>
                     <BiX className="bix" onClick={() => {
-                        document.querySelector(".app-modal-history-edit").classList.add("d-none");
-                        let money = document.querySelector(".app-modal-history-edit main input");
+                        document.querySelector(".edit-history").classList.add("d-none");
+                        let money = document.querySelector(".edit-history main input");
                         money.placeholder = "Money";
                         money.classList.remove("red-placeholder");
                         this.editHistoryForm.reset();
+                        this.setState({ walletId: null, categoryId: null });
                     }}/>
                 </header>
                 <main className="d-flex flex-column justify-content-center">
@@ -75,6 +78,34 @@ class EditHistory extends React.Component {
                             })()}
                         </select>
                     </div>
+                    <div className="d-flex mb-3">
+                        <select className="form-select select-date" defaultValue={0} onChange={(el) => this.setState({ walletId: el.target.value !== 0 ? el.target.value : null })}>
+                            <option value="0">None</option>
+                            {(() => {
+                                const wallets = this.props.wallets;
+                                const options = [];
+
+                                for (let i = 0; i < wallets.length; i++) {
+                                    options.push(<option key={wallets[i].id} value={wallets[i].id}>{wallets[i].name}</option>);
+                                }
+
+                                return options;
+                            })()}
+                        </select>
+                        <select className="form-select select-date" defaultValue={0} onChange={(el) => this.setState({ categoryId: el.target.value !== 0 ? el.target.value : null })}>
+                            <option value="0">None</option>
+                            {(() => {
+                                const categories = this.props.categories;
+                                const options = [];
+
+                                for (let i = 0; i < categories.length; i++) {
+                                    options.push(<option key={categories[i].id} value={categories[i].id}>{categories[i].name}</option>);
+                                }
+
+                                return options;
+                            })()}
+                        </select>
+                    </div>
                     <div className="input-group mb-3">
                         <textarea rows="3" placeholder="Desc" className="form-control scroll-0" maxLength="150"></textarea>
                     </div>
@@ -82,21 +113,21 @@ class EditHistory extends React.Component {
                 <footer className="d-flex justify-content-end">
                     <button className="btn" onClick={(e) => {
                         e.preventDefault();
-                        const money = document.querySelector(".app-modal-history-edit main input");
-                        const day = (parseInt(document.querySelector(".app-modal-history-edit .select-date").value)).toString().padStart(2, '0');
-                        const month = (parseInt(document.querySelector(".app-modal-history-edit .select-month").value) + 1).toString().padStart(2, '0');
-                        const year = document.querySelector(".app-modal-history-edit .select-year").value;
+                        const money = document.querySelector(".edit-history main input");
+                        const day = (parseInt(document.querySelector(".edit-history .select-date").value)).toString().padStart(2, '0');
+                        const month = (parseInt(document.querySelector(".edit-history .select-month").value) + 1).toString().padStart(2, '0');
+                        const year = document.querySelector(".edit-history .select-year").value;
                         const date = `${day}.${month}.${year}`;
-                        const desc = document.querySelector(".app-modal-history-edit main textarea");
+                        const desc = document.querySelector(".edit-history main textarea");
                         
-                        const type = document.querySelectorAll(".app-modal-history-edit main input[type='radio']")[0].checked ? "INCOME" : "OUTCOME";
+                        const type = document.querySelectorAll(".edit-history main input[type='radio']")[0].checked ? "INCOME" : "OUTCOME";
 
                         if (money.value !== "") {
                             if (desc.value === "") {
                                 desc.value = "-";
                             }
-                            this.props.editHistory(parseInt(money.value), type, date, desc.value);
-                            document.querySelector(".app-modal-history-edit").classList.add("d-none");
+                            this.props.editHistory(parseInt(money.value), type, date, desc.value, this.state.walletId, this.state.categoryId);
+                            document.querySelector(".edit-history").classList.add("d-none");
                             money.placeholder = "Money";
                             money.classList.remove("red-placeholder");
                             this.editHistoryForm.reset();
@@ -106,6 +137,7 @@ class EditHistory extends React.Component {
                             money.classList.add("red-placeholder");
                         }
 
+                        this.setState({ walletId: null, categoryId: null });
                         money.value = "";
 
                     }}>Edit</button>

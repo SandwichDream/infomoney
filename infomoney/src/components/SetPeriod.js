@@ -13,12 +13,12 @@ class SetPeriod extends React.Component {
 
         const formattedDate = `${year}-${month}-${day}`;
 
-        return(<div className="app-set-period modal-fullscreen d-none">
+        return(<div className="set-period app-modal modal-fullscreen d-none">
             <div>
                 <header className="d-flex justify-content-between mb-4">
                     <h5>Set Period</h5>
                     <BiX className="bix" onClick={() => {
-                        document.querySelector(".app-set-period").classList.add("d-none");
+                        document.querySelector(".set-period").classList.add("d-none");
                     }}/>
                 </header>
                 <main className="d-flex flex-column">
@@ -39,13 +39,13 @@ class SetPeriod extends React.Component {
                             btns[i].classList.remove("chosen");
                         }
 
-                        const dateInputs = document.querySelectorAll(".app-set-period main input");
+                        const dateInputs = document.querySelectorAll(".set-period main input");
                         
                         this.props.setDateFrom(dateInputs[0].value);
                         this.props.setDateTo(dateInputs[1].value);
                         this.props.setInitialStatePI();
 
-                        document.querySelector(".app-set-period").classList.add("d-none");
+                        document.querySelector(".set-period").classList.add("d-none");
 
                     }}>Set</button>
                 </footer>
